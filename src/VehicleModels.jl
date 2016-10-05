@@ -2,7 +2,6 @@ module VehicleModels
 
 using Media, DifferentialEquations, Dierckx
 
-#const threebody_μ = parse(BigFloat,"0.012277471"); const threebody_μ′ = 1 - threebody_μ
  # eventually find a better way to refernce these!
 main_dir = "/home/febbo/Documents/workspace/OCP";
 func_dir = string(main_dir,"/functions/")# model functions
@@ -25,32 +24,35 @@ function Three_DOF(args...)
     plot_on = true
     println("testing 3DOF!!\n")
   elseif length(args) == 1
-    x0 = args[1:8]
-    plot_on = false
+    N = args[1]
+    x0 = args[2:8]
+    SR_all = args[9:N+9]
+    Jx_all = args[N+9:2*N+9]
+    plot_on = false;
   end
 
     f = (t,x,dx) -> begin
     # STATES:
     # 1. X position
-    X        	= x[1];
+    X	  = x[1];
     # 2. Y position
-    Y       	= x[2];
+    Y	  = x[2];
     # 3. Lateral Speed
-    V           = x[3];
+    V   = x[3];
     # 4. Yaw Rate
-    r           = x[4];
+    r   = x[4];
     # 5. Steering Angle
-    SA          = x[5];
+    SA  = x[5];
     # 6. Yaw angle
-    PSI         = x[6];
+    PSI = x[6];
     # 7. Longitudinal Speed
-    U           = x[7];
+    U   = x[7];
     # 8. Longitudinal Acceleration
-    Ax          = x[8];
+    Ax  = x[8];
 
     # Controls
-    SR          = 200;  # interp1f(CMD_TM, CMD_SR, t, 'pchip');
-    Jx          = 200;  # interp1f(CMD_TM, CMD_Jx, t, 'pchip');
+    SR  = 200;  # interp1f(CMD_TM, CMD_SR, t, 'pchip');
+    Jx  = 200;  # interp1f(CMD_TM, CMD_Jx, t, 'pchip');
 
     dx[1]   = U*cos(PSI) - (V + la*r)*sin(PSI);    # X position
     dx[2] 	= U*sin(PSI) + (V + la*r)*cos(PSI);    # Y position
@@ -64,7 +66,10 @@ function Three_DOF(args...)
   #tspan = [0,10]
   prob = ODEProblem(f, x0)
   sol = solve(prob)
-  plot(sol)
+
+  if plot_on
+    plot(sol)
+  end
 end
 
 
