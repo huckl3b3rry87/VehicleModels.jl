@@ -1,6 +1,6 @@
 module VehicleModels
 
-using Media, DifferentialEquations
+using Media, DifferentialEquations, Dierckx
 
 #const threebody_μ = parse(BigFloat,"0.012277471"); const threebody_μ′ = 1 - threebody_μ
  # eventually find a better way to refernce these!
@@ -49,8 +49,8 @@ function Three_DOF(args...)
     Ax          = x[8];
 
     # Controls
-    SR          = 0;  # interp1f(CMD_TM, CMD_SR, t, 'pchip');
-    Jx          = 0;  # interp1f(CMD_TM, CMD_Jx, t, 'pchip');
+    SR          = 200;  # interp1f(CMD_TM, CMD_SR, t, 'pchip');
+    Jx          = 200;  # interp1f(CMD_TM, CMD_Jx, t, 'pchip');
 
     dx[1]   = U*cos(PSI) - (V + la*r)*sin(PSI);    # X position
     dx[2] 	= U*sin(PSI) + (V + la*r)*cos(PSI);    # Y position
@@ -61,6 +61,7 @@ function Three_DOF(args...)
     dx[7]  	= Ax;                                  # Longitudinal Speed
     dx[8]  	= Jx;                                  # Longitudinal Acceleration
   end
+  #tspan = [0,10]
   prob = ODEProblem(f, x0)
   sol = solve(prob)
   plot(sol)
