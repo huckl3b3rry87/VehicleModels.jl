@@ -1,4 +1,4 @@
-function FZ_RR(F_yf, F_yr, V, Ax, Yaw)
+function FZ_RR(N, F_yf, F_yr, V, Ax, Yaw)
 
 	# rear right vertical tire force
 	FZ_RR = zeros(Float64, (N+1,1))

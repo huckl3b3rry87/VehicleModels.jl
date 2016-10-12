@@ -2,18 +2,23 @@ module VehicleModels
 
 using Media, DifferentialEquations, Dierckx, Atom, Plots, Parameters
 
+macro def(name, definition)
+  return quote
+    macro $name()
+      esc($(Expr(:quote,definition)))
+    end
+  end
+end
+
 # Three DOF Vehicle Model
-include("Three_DOF/F_YF.jl")   # tire force functions
 include("Three_DOF/F_YR.jl")
+include("Three_DOF/F_YF.jl")
 
 # other functions to export
 include("Three_DOF/FZ_RL.jl")
 include("Three_DOF/FZ_RR.jl")
 include("Three_DOF/Ax_max.jl")
 include("Three_DOF/Ax_min.jl")
-
-#include("Three_DOF/parameters.jl") # set up parameters
-#include("Three_DOF/initial_states.jl")
 
 # funcitons in the VehicleModels.jl package
 include("utils.jl")
@@ -25,23 +30,28 @@ export
   # Functions
   Three_DOF,
   Linear_Spline,
-  F_YF,
-  F_YR,
+#  F_YF,
+#  F_YR,
   FZ_RL,
   FZ_RR,
-  Ax_min,
-  Ax_max,
+#  Ax_min,
+#  Ax_max,
 
   # Macros and support functions
+  @F_YF,
+  @F_YR,
+  @Ax_min,
+  @Ax_max,
   @unpack_Vpara,
-  @pack_Vpara # seems like you need this if you are modifying the data
+  @pack_Vpara
+ # seems like you need this if you are modifying the data
   # MAKE SURE YOU REMOVE THE FINAL COMMA!!
 
 #############################
 # types/functions/constants #
 #############################
-
 @with_kw immutable Vpara @deftype Float64
+    N = 45
     # define model parameters
     m          = 2.6887e+03
     Izz        = 4.1101e+03
@@ -57,20 +67,20 @@ export
     AXC::Array{Float64,1} = [-0.000128015180401862,	0.00858618595422724,	-0.225657108071454,	3.08283259993589,	-0.000138537090018958,	0.00684702729623608,	-0.120391102052425,	-3.55886697370079]
 
     # vehicle Limits
-    x_min = 0
-    x_max = 400
-    y_min = 0
-    y_max = 400
+    x_min = 0.
+    x_max = 400.
+    y_min = 0.
+    y_max = 400.
     sa_min = -30*pi/180
     sa_max = 30*pi/180
     psi_min = -2*pi
     psi_max = 2*pi
-    u_min = 5
-    u_max = 29
+    u_min = 5.
+    u_max = 29.
     sr_min = -5*pi/180
     sr_max = 5*pi/180
-    jx_min = -5
-    jx_max = 5
+    jx_min = -5.
+    jx_max = 5.
 
     # tire parameters
     FZ0     = 35000.0;
@@ -100,27 +110,28 @@ export
     PV2     = PVY2/FZ0;
 
     # constrained initial states
-    x0_     = 200;
-    y0_     = 0;
+    x0_     = 200.;
+    y0_     = 0.;
     psi0_   = pi/2;
-    v0_     = 0;
-    u0_     = 15;
+    v0_     = 0.;
+    u0_     = 15.;
 
     ##TO DO!! Probably want to move some of these parameters somewhere else?
+
     # weights
-    w_goal = 1; # should be zero when vehicle is not within goal distance during prediction horizon
+    w_goal = 1.; # should be zero when vehicle is not within goal distance during prediction horizon
     w_psi = 0.01;
     w_time = 0.05;
     w_haf = 1.0e-5;
     w_Fz = 0.1;  #0.5 in paper
-    w_ce = 1;
+    w_ce = 1.;
     w_sa = 0.1;
-    w_sr = 1;
+    w_sr = 1.;
     w_jx = 0.01;
 
-    sm = 5 # m add distance to make sure we don't hit obstacle
-    Fz_min          = 1000;
-    Fz_off          = 100;
+    sm = 5. # m add distance to make sure we don't hit obstacle
+    Fz_min          = 1000.;
+    Fz_off          = 100.;
     a_t = Fz_min + 3*Fz_off;  # soft tire force constraint constants
     b_t = Fz_off;
     EP = 0.001
@@ -133,13 +144,14 @@ function Three_DOF(pa::Vpara,
                    Jx::Vector)
     @unpack_Vpara pa
     t0=t[1];tf=t[end];
+    ODE_solve = true
 
     # create splines
     sp_SR=Linear_Spline(t,SR);
     sp_Jx=Linear_Spline(t,Jx);
 
     f = (t,x,dx) -> begin
-    # states:
+    # states
     X	  = x[1];  # 1. X position
     Y	  = x[2];  # 2. Y position
     V   = x[3];  # 3. Lateral Speed
@@ -153,10 +165,11 @@ function Three_DOF(pa::Vpara,
     SR  = sp_SR(t);
     Jx  = sp_Jx(t);
 
+    # diff eqs.
     dx[1]   = U*cos(PSI) - (V + la*r)*sin(PSI);    # X position
     dx[2] 	= U*sin(PSI) + (V + la*r)*cos(PSI);    # Y position
-    dx[3]   = (F_YF(V, U, Ax, r, SA) + F_YR(V, U, Ax, r, SA))/m - r*U; # Lateral Speed
-    dx[4]  	= (la*F_YF(V, U, Ax, r, SA)-lb*F_YR(V, U, Ax, r, SA))/Izz; # Yaw Rate
+    dx[3]   = (@F_YF() + @F_YR())/m - r*U;             # Lateral Speed
+    dx[4]  	= (la*@F_YF()-lb*@F_YR())/Izz;             # Yaw Rate
     dx[5]   = SR;                                  # Steering Angle
     dx[6]  	= r;                                   # Yaw Angle
     dx[7]  	= Ax;                                  # Longitudinal Speed
@@ -166,7 +179,6 @@ function Three_DOF(pa::Vpara,
   prob = ODEProblem(f, x0)
   solve(prob::ODEProblem,tspan)
 end
-
 end # module
 
 #= OLD
