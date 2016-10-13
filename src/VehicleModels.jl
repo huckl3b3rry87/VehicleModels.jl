@@ -32,14 +32,16 @@ export
   Linear_Spline,
 #  F_YF,
 #  F_YR,
-  FZ_RL,
-  FZ_RR,
+#  FZ_RL,
+#  FZ_RR,
 #  Ax_min,
 #  Ax_max,
 
   # Macros and support functions
   @F_YF,
   @F_YR,
+  @FZ_RL,
+  @FZ_RR,
   @Ax_min,
   @Ax_max,
   @unpack_Vpara,
@@ -168,8 +170,8 @@ function Three_DOF(pa::Vpara,
     # diff eqs.
     dx[1]   = U*cos(PSI) - (V + la*r)*sin(PSI);    # X position
     dx[2] 	= U*sin(PSI) + (V + la*r)*cos(PSI);    # Y position
-    dx[3]   = (@F_YF() + @F_YR())/m - r*U;             # Lateral Speed
-    dx[4]  	= (la*@F_YF()-lb*@F_YR())/Izz;             # Yaw Rate
+    dx[3]   = (@F_YF() + @F_YR())/m - r*U;         # Lateral Speed
+    dx[4]  	= (la*@F_YF()-lb*@F_YR())/Izz;         # Yaw Rate
     dx[5]   = SR;                                  # Steering Angle
     dx[6]  	= r;                                   # Yaw Angle
     dx[7]  	= Ax;                                  # Longitudinal Speed
