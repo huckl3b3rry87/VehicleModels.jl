@@ -30,12 +30,6 @@ export
   # Functions
   Three_DOF,
   Linear_Spline,
-#  F_YF,
-#  F_YR,
-#  FZ_RL,
-#  FZ_RR,
-#  Ax_min,
-#  Ax_max,
 
   # Macros and support functions
   @F_YF,
@@ -46,7 +40,6 @@ export
   @Ax_max,
   @unpack_Vpara,
   @pack_Vpara
- # seems like you need this if you are modifying the data
   # MAKE SURE YOU REMOVE THE FINAL COMMA!!
 
 #############################
@@ -179,93 +172,6 @@ function Three_DOF(pa::Vpara,
   end
   tspan = [t0,tf]
   prob = ODEProblem(f, x0)
-  solve(prob::ODEProblem,tspan)
+  solve(prob::ODEProblem,tspan,alg=:RK4)
 end
 end # module
-
-#= OLD
-abstract Abstract_Model # Model class
-@with_kw immutable Vehicle_Parameters <: Abstract_Model
-  m::Float64
-  Izz::Float64
-  la::Float64
-  lb::Float64
-  FzF0::Float64
-  FzR0::Float64
-  dFzx_coeff::Float64
-  KZX::Float64
-  KZYR::Float64
-  AXC::Array{Float64,1}   # defines polynominal for acceleration bounds
-end
-
-function Vehicle_Parameters() # Default constructor
-  Vehicle_Parameters(m,
-                     Izz,
-                     la,
-                     lb,
-                     FzF0,
-                     FzR0,
-                     dFzx_coeff,
-                     KZX,
-                     KZYR,
-                     AXC,
-                    )
-end
-
-immutable Tire_Parameters <: Abstract_Model
-  FZ0::Float64
-  PCY1::Float64           #Shape factor Cfy for lateral forces
-  PDY1::Float64           #Lateral friction Muy
-  PDY2::Float64           #Variation of friction Muy with load
-  PEY1::Float64           #Lateral curvature Efy at Fznom
-  PEY2::Float64           #Variation of curvature Efy with load
-  PEY3::Float64           #Zero order camber dependency of curvature Efy
-  PKY1::Float64           #Maximum value of stiffness Kfy/Fznom
-  PKY2::Float64           #Load at which Kfy reaches maximum value
-  PHY1::Float64           #Horizontal shift Shy at Fznom
-  PHY2::Float64           #Variation of shift Shy with load
-  PVY1::Float64           #Vertical shift in Svy/Fz at Fznom
-  PVY2::Float64           #Variation of shift Svy/Fz with load
-  PC1::Float64
-  PD1::Float64
-  PD2::Float64
-  PE1::Float64
-  PE2::Float64
-  PE3::Float64
-  PK1::Float64
-  PK2::Float64
-  PH1::Float64
-  PH2::Float64
-  PV1::Float64
-  PV2::Float64
-end
-
-function Tire_Parameters() # Default constructor
-  Tire_Parameters(FZ0,
-                  PCY1,
-                  PDY1,
-                  PDY2,
-                  PEY1,
-                  PEY2,
-                  PEY3,
-                  PKY1,
-                  PKY2,
-                  PHY1,
-                  PHY2,
-                  PVY1,
-                  PVY2,
-                  PC1,
-                  PD1,
-                  PD2,
-                  PE1,
-                  PE2,
-                  PE3,
-                  PK1,
-                  PK2,
-                  PH1,
-                  PH2,
-                  PV1,
-                  PV2,
-                  )
-end
-=#
