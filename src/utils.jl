@@ -14,14 +14,14 @@ function Linear_Spline(t::Vector,V::Vector)
       end
   end
   rm_idx = find(M)
+  
+  if (length(t)==length(rm_idx))
+    error("No time has elapsed and there will be an issue with interpolation! -----> Do not even try to simulate this data!")
+  end
 
   # initialize vetors
   t_new = Array(Float64,(length(t)-length(rm_idx)));
   V_new = Array(Float64,(length(t)-length(rm_idx)));
-
-  if (length(t)==length(rm_idx))
-    error("No time has elapsed and there will be an issue with interpolation! -----> Do not even try to simulate this data!")
-  end
 
   q=1;
   for i in 1:length(t)
