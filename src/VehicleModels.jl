@@ -46,7 +46,7 @@ export
 # types/functions/constants #
 #############################
 @with_kw immutable Vpara @deftype Float64
-    N = 45
+  #  N = 45 # should not be in here!!
     # define model parameters
     m          = 2.6887e+03
     Izz        = 4.1101e+03
@@ -136,10 +136,10 @@ function Three_DOF(pa::Vpara,
                    x0::Vector,
                    t::Vector,
                    SR::Vector,
-                   Jx::Vector)
+                   Jx::Vector,
+                   t0::Float64,
+                   tf::Float64)
     @unpack_Vpara pa
-    t0=t[1];tf=t[end];
-    ODE_solve = true
 
     # create splines
     sp_SR=Linear_Spline(t,SR);
