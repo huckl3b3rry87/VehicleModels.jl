@@ -4,17 +4,16 @@ function Linear_Spline(t::Vector,V::Vector)
 
   # remove any repeating values
   M = Array(Bool,length(t)); M[1:length(t)] = false;
-  for i in 1:length(t)
-      for q in 1:length(t)
-          if t[i]==t[q] && i!=q || M[i]
-              M[i]=true
-          else
-              M[i]=false
-          end
+  for i in 1:length(t)-1
+      if t[i]==t[i+1]
+          M[i]=true
+      else
+          M[i]=false
       end
   end
+
   rm_idx = find(M)
-  
+
   if (length(t)==length(rm_idx))
     error("No time has elapsed and there will be an issue with interpolation! -----> Do not even try to simulate this data!")
   end
