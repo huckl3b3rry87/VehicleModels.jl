@@ -46,7 +46,6 @@ export
 # types/functions/constants #
 #############################
 @with_kw immutable Vpara @deftype Float64
-  #  N = 45 # should not be in here!!
     # define model parameters
     m          = 2.6887e+03
     Izz        = 4.1101e+03
@@ -110,8 +109,13 @@ export
     psi0_   = pi/2;
     v0_     = 0.;
     u0_     = 15.;
+    sa0_    = 0.; # adding additional initial states
+    sr0_    = 0.;
+    ax0_    = 0.;
+    jx0_    = 0.;
+    r0_     = 0.;
 
-    ##TO DO!! Probably want to move some of these parameters somewhere else?
+    ##TODO: Probably want to move some of these parameters somewhere else?
 
     # weights
     w_goal = 1.; # should be zero when vehicle is not within goal distance during prediction horizon
