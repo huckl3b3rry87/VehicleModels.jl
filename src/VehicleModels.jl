@@ -1,6 +1,6 @@
 module VehicleModels
 
-using Media, DifferentialEquations, Dierckx, Atom, Plots, Parameters
+using Media, DifferentialEquations, Dierckx, Atom, Plots, Parameters, Interpolations
 
 macro def(name, definition)
   return quote
@@ -61,20 +61,20 @@ export
     AXC::Array{Float64,1} = [-0.000128015180401862,	0.00858618595422724,	-0.225657108071454,	3.08283259993589,	-0.000138537090018958,	0.00684702729623608,	-0.120391102052425,	-3.55886697370079]
 
     # vehicle Limits
-    x_min = 0.
-    x_max = 400.
-    y_min = 0.
-    y_max = 400.
-    sa_min = -30*pi/180
-    sa_max = 30*pi/180
-    psi_min = -2*pi
-    psi_max = 2*pi
-    u_min = 5.
-    u_max = 29.
-    sr_min = -5*pi/180
-    sr_max = 5*pi/180
-    jx_min = -5.
-    jx_max = 5.
+    x_min    = 0.
+    x_max    = 400.
+    y_min    = 0.
+    y_max    = 400.
+    sa_min   = -30*pi/180
+    sa_max   = 30*pi/180
+    psi_min  = -2*pi
+    psi_max  = 2*pi
+    u_min    = 5.   #5.
+    u_max    = 29.
+    sr_min   = -5*pi/180
+    sr_max   = 5*pi/180
+    jx_min   = -5.
+    jx_max   = 5.
 
     # tire parameters
     FZ0     = 35000.0;
@@ -119,21 +119,21 @@ export
 
     # weights
     w_goal = 1.; # should be zero when vehicle is not within goal distance during prediction horizon
-    w_psi = 0.01;
+    w_psi  = 0.01;
     w_time = 0.05;
-    w_haf = 1.0e-5;
-    w_Fz = 0.1;  #0.5 in paper
-    w_ce = 1.;
-    w_sa = 0.1;
-    w_sr = 1.;
-    w_jx = 0.01;
+    w_haf  = 1.0e-5;
+    w_Fz   = 0.1;  #0.5 in paper
+    w_ce   = 1.;
+    w_sa   = 0.1;
+    w_sr   = 1.;
+    w_jx   = 0.01;
 
-    sm = 5. # m add distance to make sure we don't hit obstacle
-    Fz_min          = 1000.;
-    Fz_off          = 100.;
-    a_t = Fz_min + 3*Fz_off;  # soft tire force constraint constants
-    b_t = Fz_off;
-    EP = 0.001
+    sm      = 5. # m add distance to make sure we don't hit obstacle
+    Fz_min  = 1000.;
+    Fz_off  = 100.;
+    a_t     = Fz_min + 3*Fz_off;  # soft tire force constraint constants
+    b_t     = Fz_off;
+    EP      = 0.001
 end
 
 function Three_DOF(pa::Vpara,
@@ -154,23 +154,25 @@ function Three_DOF(pa::Vpara,
     X	  = x[1];  # 1. X position
     Y	  = x[2];  # 2. Y position
     V   = x[3];  # 3. Lateral Speed
-    r   = x[4];  # 4. Yaw Rate
+    R   = x[4];  # 4. Yaw Rate
     SA  = x[5];  # 5. Steering Angle
     PSI = x[6];  # 6. Yaw angle
     U   = x[7];  # 7. Longitudinal Speed
     Ax  = x[8];  # 8. Longitudinal Acceleration
 
     # controls
-    SR  = sp_SR(t);
-    Jx  = sp_Jx(t);
+    #SR  = sp_SR(t);
+    #Jx  = sp_Jx(t);
+    SR  = sp_SR[t];
+    Jx  = sp_Jx[t];
 
     # diff eqs.
-    dx[1]   = U*cos(PSI) - (V + la*r)*sin(PSI);    # X position
-    dx[2] 	= U*sin(PSI) + (V + la*r)*cos(PSI);    # Y position
-    dx[3]   = (@F_YF() + @F_YR())/m - r*U;         # Lateral Speed
+    dx[1]   = U*cos(PSI) - (V + la*R)*sin(PSI);    # X position
+    dx[2] 	= U*sin(PSI) + (V + la*R)*cos(PSI);    # Y position
+    dx[3]   = (@F_YF() + @F_YR())/m - R*U;         # Lateral Speed
     dx[4]  	= (la*@F_YF()-lb*@F_YR())/Izz;         # Yaw Rate
     dx[5]   = SR;                                  # Steering Angle
-    dx[6]  	= r;                                   # Yaw Angle
+    dx[6]  	= R;                                   # Yaw Angle
     dx[7]  	= Ax;                                  # Longitudinal Speed
     dx[8]  	= Jx;                                  # Longitudinal Acceleration
   end
@@ -178,4 +180,50 @@ function Three_DOF(pa::Vpara,
   prob = ODEProblem(f, x0)
   solve(prob::ODEProblem,tspan,alg=:RK4)
 end
+
+# this vehicle model is controlled using speed and steering angle
+function Three_DOF_2(pa::Vpara,
+                   x0::Vector,
+                   t::Vector,
+                   SA::Vector,
+                   U::Vector,
+                   t0::Float64,
+                   tf::Float64)
+error("fix x0! and finish this before using!")
+    @unpack_Vpara pa
+
+    # create splines
+    sp_SA=Linear_Spline(t,SA);
+    sp_U=Linear_Spline(t,U);
+
+    f = (t,x,dx) -> begin
+    # states
+    X	  = x[1];  # 1. X position
+    Y	  = x[2];  # 2. Y position
+    V   = x[3];  # 3. Lateral Speed
+    r   = x[4];  # 4. Yaw Rate
+    #SA  = x[5];  # 5. Steering Angle
+    PSI = x[5];  # 6. Yaw angle
+    #U   = x[7];  # 7. Longitudinal Speed
+    #Ax  = x[6];  # 8. Longitudinal Acceleration
+
+    # controls
+    SA  = sp_SA(t);
+    U  = sp_U(t);
+
+    # diff eqs.
+    dx[1]   = U*cos(PSI) - (V + la*r)*sin(PSI);    # X position
+    dx[2] 	= U*sin(PSI) + (V + la*r)*cos(PSI);    # Y position
+    dx[3]   = (@F_YF() + @F_YR())/m - r*U;         # Lateral Speed
+    dx[4]  	= (la*@F_YF()-lb*@F_YR())/Izz;         # Yaw Rate
+    #dx[5]   = SR;                                  # Steering Angle
+    dx[5]  	= r;                                   # Yaw Angle
+    #dx[6]  	= Ax;                                  # Longitudinal Speed
+    #dx[8]  	= Jx;                                  # Longitudinal Acceleration
+  end
+  tspan = [t0,tf]
+  prob = ODEProblem(f, x0)
+  solve(prob::ODEProblem,tspan,alg=:RK4)
+end
+
 end # module

@@ -30,5 +30,11 @@ function Linear_Spline(t::Vector,V::Vector)
           q=q+1
       end
   end
-  Spline1D(t_new,V_new,k=1)    # linear spline
+
+  # make interpolant using Dierckx.jl
+  #Spline1D(t_new,V_new,k=1)    # linear spline
+
+  # make interpolant using Interpolations.jl
+  knots = (t_new,)
+  interpolate(knots,V_new,Gridded(Linear()))
 end
