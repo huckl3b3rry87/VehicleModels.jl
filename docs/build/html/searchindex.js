@@ -1,0 +1,1 @@
+Search.setIndex({envversion:48,filenames:["index"],objects:{},objnames:{},objtypes:{},terms:{avail:0,can:0,clone:0,com:0,content:0,dir:0,exampl:0,github:0,http:0,huckl3b3rry87:0,ijulia:0,julia:0,make:0,notebook:0,packag:0,pkg:0,thi:0,todo:0,type:0,you:0},titles:["VehicleModels.jl"],titleterms:{instal:0,tutori:0,vehiclemodel:0}})
