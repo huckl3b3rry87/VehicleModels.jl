@@ -115,8 +115,7 @@ export
     jx0_    = 0.;
     r0_     = 0.;
 
-    ##TODO: Probably want to move some of these parameters somewhere else?
-
+    ##TODO: Move some of these parameters somewhere else
     # weights
     w_goal = 1.; # should be zero when vehicle is not within goal distance during prediction horizon
     w_psi  = 0.01;
@@ -128,12 +127,17 @@ export
     w_sr   = 1.;
     w_jx   = 0.01;
 
-    sm      = 5. # m add distance to make sure we don't hit obstacle
+    sm      = 5. # (m) distance to make sure we don't hit obstacle
     Fz_min  = 1000.;
     Fz_off  = 100.;
     a_t     = Fz_min + 3*Fz_off;  # soft tire force constraint constants
     b_t     = Fz_off;
-    EP      = 0.001
+    EP      = 0.001;
+
+    # other parameters
+    L_Rd      = 5.;       # relaxation constant for LiDAR range (m)
+    L_R       = 100.;     # LiDAR range (m)
+    sigma     = 1.;     # 0.05 (m)small margin, if the vehicle is within this margin, then the target is considered to be reached
 end
 
 function Three_DOF(pa::Vpara,
@@ -181,7 +185,7 @@ function Three_DOF(pa::Vpara,
   solve(prob::ODEProblem,tspan,alg=:RK4)
 end
 
-# this vehicle model is controlled using speed and steering angle
+# this vehicle model is controlled using speed and steering angle TODO finish this!!
 function Three_DOF_2(pa::Vpara,
                    x0::Vector,
                    t::Vector,
