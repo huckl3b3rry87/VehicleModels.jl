@@ -1,13 +1,13 @@
 # VehicleModels.jl
 
-[![Latest](https://img.shields.io/badge/docs-latest-blue.svg)](http://nloptcontrol.readthedocs.io/en/latest/)
+[![Latest](https://img.shields.io/badge/docs-latest-blue.svg)](http://vehiclemodelsjl.readthedocs.io/en/latest/)
 
 NOTE: This package is a work in progress!
 
 
 ## Documentation
 
-The full documentation can be found [here](http://nloptcontrol.readthedocs.io/en/latest/).
+The full documentation can be found [here](http://vehiclemodelsjl.readthedocs.io/en/latest/).
 
 ## Installation
 
