@@ -12,13 +12,16 @@ The full documentation can be found [here](http://vehiclemodelsjl.readthedocs.io
 ## Installation
 
 In Julia, you can install the VehicleModels.jl package by typing:
-`Pkg.clone("https://github.com/huckl3b3rry87/VehicleModels.jl")`
-
+```julia
+julia>Pkg.clone("https://github.com/huckl3b3rry87/VehicleModels.jl")
+```
 
 ## Tutorial
 
 The examples for this package are available by typing:
-  `using IJulia`
-  `notebook(dir = Pkg.dir("VehicleModels")*"/examples")`
+```julia
+julia>using IJulia
+julia>notebook(dir = Pkg.dir("VehicleModels")*"/examples")
+```
 
 TODO: Make an IJulia notebook for this
