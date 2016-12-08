@@ -6,6 +6,9 @@ In this example we use two small packages along with `DifferentialEquations.jl <
   Pkg.clone("https://github.com/huckl3b3rry87/VehicleModels.jl")
   Pkg.clone("https://github.com/huckl3b3rry87/PrettyPlots.jl")
 
+Then, the example can be ran by going into the examples folder and typing:
+::
+  include("test.jl")
 
 This is a mock example, but it demonstrates the utility of ``DifferentialEquations.jl``.
 
