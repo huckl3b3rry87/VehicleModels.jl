@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>VehicleModels.jl &mdash; VehicleModels.jl 0.0.1-rc1 documentation</title>
+  <title>Using DifferentialEquations.jl to solve a set of ODEs &mdash; VehicleModels.jl 0.0.1-rc1 documentation</title>
   
 
   
@@ -30,8 +30,8 @@
   
 
   
-    <link rel="top" title="VehicleModels.jl 0.0.1-rc1 documentation" href="#"/>
-        <link rel="next" title="Using DifferentialEquations.jl to solve a set of ODEs" href="test1.html"/> 
+    <link rel="top" title="VehicleModels.jl 0.0.1-rc1 documentation" href="index.html"/>
+        <link rel="prev" title="VehicleModels.jl" href="index.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -49,7 +49,7 @@
           
 
           
-            <a href="#" class="icon icon-home"> VehicleModels.jl
+            <a href="index.html" class="icon icon-home"> VehicleModels.jl
           
 
           
@@ -80,8 +80,8 @@
           
             
             
-                <ul>
-<li class="toctree-l1"><a class="reference internal" href="test1.html">Using <code class="docutils literal"><span class="pre">DifferentialEquations.jl</span></code> to solve a set of ODEs</a></li>
+                <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Using <code class="docutils literal"><span class="pre">DifferentialEquations.jl</span></code> to solve a set of ODEs</a></li>
 </ul>
 
             
@@ -95,7 +95,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="#">VehicleModels.jl</a>
+        <a href="index.html">VehicleModels.jl</a>
       </nav>
 
 
@@ -110,13 +110,13 @@
 
 <div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
-    <li><a href="#">Docs</a> &raquo;</li>
+    <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li>VehicleModels.jl</li>
+    <li>Using <code class="docutils literal"><span class="pre">DifferentialEquations.jl</span></code> to solve a set of ODEs</li>
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/index.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/test1.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -126,43 +126,33 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="vehiclemodels-jl">
-<h1>VehicleModels.jl<a class="headerlink" href="#vehiclemodels-jl" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>In Julia, you can install the <code class="docutils literal"><span class="pre">VehicleModels.jl</span></code> package by typing:</p>
+  <div class="section" id="using-differentialequations-jl-to-solve-a-set-of-odes">
+<h1>Using <code class="docutils literal"><span class="pre">DifferentialEquations.jl</span></code> to solve a set of ODEs<a class="headerlink" href="#using-differentialequations-jl-to-solve-a-set-of-odes" title="Permalink to this headline">¶</a></h1>
+<p>In this example we use two small packages along with <a class="reference external" href="https://github.com/JuliaDiffEq/ParameterizedFunctions.jl">DifferentialEquations.jl</a> that can be downloaded by typing:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Pkg</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="s2">&quot;https://github.com/huckl3b3rry87/VehicleModels.jl&quot;</span><span class="p">)</span>
+<span class="n">Pkg</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="s2">&quot;https://github.com/huckl3b3rry87/PrettyPlots.jl&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
-<p>The first example demonstrates moving obstacle avoidance for a large-sized high-speed ground vehicle.</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="test1.html">Using <code class="docutils literal"><span class="pre">DifferentialEquations.jl</span></code> to solve a set of ODEs</a></li>
-</ul>
-</div>
-</div>
-<div class="section" id="tutorial">
-<h2>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h2>
-<p>TODO: Make an IJulia notebook for this</p>
-<p>The examples for this package are available by typing (not there yet!):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">using</span> <span class="n">IJulia</span>
-<span class="n">notebook</span><span class="p">(</span><span class="nb">dir</span> <span class="o">=</span> <span class="n">Pkg</span><span class="o">.</span><span class="n">dir</span><span class="p">(</span><span class="s2">&quot;VehicleModels&quot;</span><span class="p">)</span><span class="o">*</span><span class="s2">&quot;/examples&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="citation">
-<h2>Citation<a class="headerlink" href="#citation" title="Permalink to this headline">¶</a></h2>
-<p>If you find this package useful, please cite this paper (currently in review):</p>
-<p>&#64;article{DunningHuchetteLubin2015,
-title = { Moving Obstacle Avoidance for Large, High-Speed Autonomous Ground Vehicles,
-author = {Huckleberry Febbo, Jiechao Liu, Paramsothy Jayakumar, Jeffrey L. Stein, and Tulga Ersal},
-conference = {Dynamic Systems and Control Conference},
-year = {2016},
-}</p>
-</div>
+<p>This is a mock example, but it demonstrates the utility of <code class="docutils literal"><span class="pre">DifferentialEquations.jl</span></code>.</p>
+<p>What we are doing is passing the control signals (optimized steering rate and longitudinal jerk) for a large-sized ground vehicle to a set of differential equations that describe the vehicle dynamics.</p>
+<p>From the optimized data, we also have all of the states so we compare the results of the two models in this case. The two models should be very close, which they are for the most part, except where the optimized steering rate and longitudinal jerk are very jumpy.</p>
+<img alt="_images/position.gif" src="_images/position.gif" />
+<p>For a closer look at the end (last optimization) of the static plots, look below.</p>
+<p><strong>Taking a look at the states:</strong></p>
+<img alt="_images/main.png" src="_images/main.png" />
+<p><strong>A closer look at the states and controls:</strong></p>
+<img alt="_images/longv.png" src="_images/longv.png" />
+<img alt="_images/ax.png" src="_images/ax.png" />
+<img alt="_images/jx.png" src="_images/jx.png" />
+<img alt="_images/sa.png" src="_images/sa.png" />
+<img alt="_images/sr.png" src="_images/sr.png" />
+<img alt="_images/yaw.png" src="_images/yaw.png" />
+<img alt="_images/yr.png" src="_images/yr.png" />
+<img alt="_images/latv.png" src="_images/latv.png" />
+<img alt="_images/pp.png" src="_images/pp.png" />
+<p><strong>The tire forces are:</strong></p>
+<img alt="_images/vt.png" src="_images/vt.png" />
+<img alt="_images/lt.png" src="_images/lt.png" />
 </div>
 
 
@@ -172,8 +162,8 @@ year = {2016},
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="test1.html" class="btn btn-neutral float-right" title="Using DifferentialEquations.jl to solve a set of ODEs" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
+        <a href="index.html" class="btn btn-neutral" title="VehicleModels.jl" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

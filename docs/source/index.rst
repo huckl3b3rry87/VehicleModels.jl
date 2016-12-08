@@ -6,10 +6,7 @@
 VehicleModels.jl
 ================
 
-Contents:
 
-.. toctree::
-   :maxdepth: 2
 
 
 Installation
@@ -20,13 +17,32 @@ In Julia, you can install the ``VehicleModels.jl`` package by typing:
   Pkg.clone("https://github.com/huckl3b3rry87/VehicleModels.jl")
 
 
+Examples
+--------
+The first example demonstrates moving obstacle avoidance for a large-sized high-speed ground vehicle.
+
+.. toctree::
+   :maxdepth: 2
+
+   test1
+
 Tutorial
 --------
 
-The examples for this package are available by typing:
+TODO: Make an IJulia notebook for this
+
+The examples for this package are available by typing (not there yet!):
 ::
  using IJulia
  notebook(dir = Pkg.dir("VehicleModels")*"/examples")
 
+Citation
+--------
+If you find this package useful, please cite this paper (currently in review):
 
-TODO: Make an IJulia notebook for this
+@article{DunningHuchetteLubin2015,
+title = { Moving Obstacle Avoidance for Large, High-Speed Autonomous Ground Vehicles,
+author = {Huckleberry Febbo, Jiechao Liu, Paramsothy Jayakumar, Jeffrey L. Stein, and Tulga Ersal},
+conference = {Dynamic Systems and Control Conference},
+year = {2016},
+}

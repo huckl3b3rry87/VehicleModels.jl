@@ -1,0 +1,2 @@
+"ID","tire_model","nonlinear_acceleration_constraints","vertical_tire_force_constraints","N","execution_horizon","solver_def","integration_scheme","x_ref","y_ref","psi_ref"
+1,"nonlinear","on","on",60,0.5,"KNITRO","trapazoidal",200,100,1.5707963267948966

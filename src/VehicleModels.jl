@@ -165,8 +165,8 @@ function Three_DOF(pa::Vpara,
     Ax  = x[8];  # 8. Longitudinal Acceleration
 
     # controls
-    #SR  = sp_SR(t);
-    #Jx  = sp_Jx(t);
+    #SR  = sp_SR(t); # using Interpolations.jl
+    #Jx  = sp_Jx(t); # using Interpolations.jl
     SR  = sp_SR[t];
     Jx  = sp_Jx[t];
 
