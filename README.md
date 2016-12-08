@@ -31,9 +31,9 @@ julia>notebook(dir = Pkg.dir("VehicleModels")*"/examples")
 
 If you find this package useful, please cite this paper (currently in review):
 
-@article{DunningHuchetteLubin2015,
-title = { Moving Obstacle Avoidance for Large, High-Speed Autonomous Ground Vehicles,
-author = {Huckleberry Febbo, Jiechao Liu, Paramsothy Jayakumar, Jeffrey L. Stein, and Tulga Ersal},
-conference = {Dynamic Systems and Control Conference},
-year = {2016},
-}
+    @article{Febbo2016,
+    title = { Moving Obstacle Avoidance for Large, High-Speed Autonomous Ground Vehicles,
+    author = {Huckleberry Febbo, Jiechao Liu, Paramsothy Jayakumar, Jeffrey L. Stein, and Tulga Ersal},
+    conference = {Dynamic Systems and Control Conference},
+    year = {2016},
+    }
