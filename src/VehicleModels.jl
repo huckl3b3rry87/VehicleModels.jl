@@ -180,9 +180,9 @@ function Three_DOF(pa::Vpara,
     dx[7]  	= Ax;                                  # Longitudinal Speed
     dx[8]  	= Jx;                                  # Longitudinal Acceleration
   end
-  tspan = [t0,tf]
-  prob = ODEProblem(f, x0)
-  solve(prob::ODEProblem,tspan,alg=:RK4)
+  tspan = (t0,tf)
+  prob = ODEProblem(f, x0,tspan)
+  solve(prob,RK4())
 end
 
 # this vehicle model is controlled using speed and steering angle TODO finish this!!
@@ -225,9 +225,9 @@ error("fix x0! and finish this before using!")
     #dx[6]  	= Ax;                                  # Longitudinal Speed
     #dx[8]  	= Jx;                                  # Longitudinal Acceleration
   end
-  tspan = [t0,tf]
-  prob = ODEProblem(f, x0)
-  solve(prob::ODEProblem,tspan,alg=:RK4)
+  tspan = (t0,tf)
+  prob = ODEProblem(f, x0,tspan)
+  solve(prob,RK4())
 end
 
 end # module
