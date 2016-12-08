@@ -18,10 +18,22 @@ julia>Pkg.clone("https://github.com/huckl3b3rry87/VehicleModels.jl")
 
 ## Tutorial
 
+TODO: Make an IJulia notebook for this
+
 The examples for this package are available by typing:
 ```julia
 julia>using IJulia
 julia>notebook(dir = Pkg.dir("VehicleModels")*"/examples")
 ```
 
-TODO: Make an IJulia notebook for this
+
+## Citation
+
+If you find this package useful, please cite this paper (currently in review):
+
+@article{DunningHuchetteLubin2015,
+title = { Moving Obstacle Avoidance for Large, High-Speed Autonomous Ground Vehicles,
+author = {Huckleberry Febbo, Jiechao Liu, Paramsothy Jayakumar, Jeffrey L. Stein, and Tulga Ersal},
+conference = {Dynamic Systems and Control Conference},
+year = {2016},
+}
