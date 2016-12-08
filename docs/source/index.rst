@@ -29,12 +29,13 @@ The first example demonstrates moving obstacle avoidance for a large-sized high-
 Tutorial
 --------
 
-TODO: Make an IJulia notebook for this
-
-The examples for this package are available by typing (not there yet!):
+The examples for this package are available by typing:
 ::
  using IJulia
  notebook(dir = Pkg.dir("VehicleModels")*"/examples")
+
+Then, the ``Three_DOF_ex.ipynb`` can be looked at!
+
 
 Citation
 --------

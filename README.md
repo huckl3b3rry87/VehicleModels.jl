@@ -18,9 +18,7 @@ julia>Pkg.clone("https://github.com/huckl3b3rry87/VehicleModels.jl")
 
 ## Tutorial
 
-TODO: Make an IJulia notebook for this
-
-The examples for this package are available by typing:
+The example for this package are available by typing:
 ```julia
 julia>using IJulia
 julia>notebook(dir = Pkg.dir("VehicleModels")*"/examples")
