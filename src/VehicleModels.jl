@@ -182,7 +182,7 @@ function Three_DOF(pa::Vpara,
   end
   tspan = (t0,tf)
   prob = ODEProblem(f, x0,tspan)
-  solve(prob,RK4())
+  solve(prob)
 end
 
 # this vehicle model is controlled using speed and steering angle TODO finish this!!

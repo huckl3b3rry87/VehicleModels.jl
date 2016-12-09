@@ -1,7 +1,7 @@
 using VehicleModels, Plots, DataFrames
 using PrettyPlots
 # Name For Resutls
-results_dir = string("testing");
+results_dir = string("testing2");
 
 dfs = Vector{DataFrame}(2) # create am empty DataFrame
 
@@ -54,4 +54,4 @@ dfs[2]=x_to_DataFrame(t,x,y,sa,ax,psi,u,v,r,jx,sr) # according to ODE equations 
 all_plots(dfs,["opt.","RK4"],results_dir,obs_data,s_data,pa)
 
 # simulate
-panim_fun(dfs,["opt.","RK4"], results_dir, obs_data,s_data,pa)
+#panim_fun(dfs,["opt.","RK4"], results_dir, obs_data,s_data,pa)
