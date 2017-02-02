@@ -56,13 +56,17 @@
     PV1     = PVY1 - PVY2;
     PV2     = PVY2/FZ0;
 
+    Caf =  -8.4138e+04;	# cornering stiffness--front axle (N/rad)
+    Car =  -7.8126e+04;	# cornering stiffness-- rear axle (N/rad)
+    Fyf_min = -7500;
+    Fyf_max = 7500;
     # constrained initial states
     x0_     = 200.;
     y0_     = 0.;
     psi0_   = pi/2;
     v0_     = 0.;
     u0_     = 15.;
-    sa0_    = 0.; # adding additional initial states
+    sa0_    = 0.;
     sr0_    = 0.;
     ax0_    = 0.;
     jx0_    = 0.;

@@ -18,11 +18,9 @@ export
   Vpara,
 
   # Functions
-  Three_DOF,
   Linear_Spline,
-
-  # JuMP ready ODEs
-  ThreeDOF,
+  ThreeDOFv1,
+  ThreeDOFv2,
 
   # Macros and support functions
   @F_YF,
