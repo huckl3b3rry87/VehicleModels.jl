@@ -23,7 +23,7 @@ function Linear_Spline(t::Vector,V::Vector)
   V_new = Array(Float64,(length(t)-length(rm_idx)));
 
   q=1;
-  for i in 1:length(t)
+  for i in 1:length(V) #TODO could put an error message here if V and t are different sizes
       if !M[i]
           t_new[q] = t[i];
           V_new[q] = V[i];
