@@ -17,7 +17,7 @@ Date Create: 10/20/2017, Last Modified: 2/1/2017 \n
 --------------------------------------------------------------------------------------\n
 # this vehicle model is controlled using steering angle and speed
 """
-function ThreeDOFv1{T<:Any}(mdl::JuMP.Model,n,x::Array{T,2},u::Array{T,2},params)
+function ThreeDOFv1{T<:Any}(mdl::JuMP.Model,n,R,x::Array{T,2},u::Array{T,2},params)
   if n.integrationMethod==:tm; L=size(x)[1]; else; L=size(x)[1]-1; end
   dx = Array(Any,L,n.numStates)
   v = x[:,3]; r = x[:,4]; psi = x[:,5];
@@ -33,11 +33,15 @@ function ThreeDOFv1{T<:Any}(mdl::JuMP.Model,n,x::Array{T,2},u::Array{T,2},params
 
   # vertical tire load
   FZ_rl_con=@NLconstraint(mdl, [i=1:L], 0 <=  0.5*(FzR0 + KZX*(ax[i] - v[i]*r[i])) - KZYR*((FYF[i] + FYR[i])/m) - Fz_min)
+  newConstraint(R,FZ_rl_con,:FZ_rl_con);
   FZ_rr_con=@NLconstraint(mdl, [i=1:L], 0 <=  0.5*(FzR0 + KZX*(ax[i] - v[i]*r[i])) + KZYR*((FYF[i] + FYR[i])/m) - Fz_min)
+  newConstraint(R,FZ_rr_con,:FZ_rr_con);
 
   # linear tire and for now this also constrains the nonlinear tire model
   Fyf_con=@NLconstraint(mdl, [i=1:L], Fyf_min <=  (atan((v[i] + la*r[i])/(ux[i]+EP)) - sa[i])*Caf <= Fyf_max)
+  newConstraint(R,Fyf_con,:Fyf_con);
   Fyr_con=@NLconstraint(mdl, [i=1:L], Fyf_min <=   atan((v[i] - lb*r[i])/(ux[i]+EP))*Car <= Fyf_max)
+  newConstraint(R,Fyr_con,:Fyr_con);
 
   dx[:,1] = @NLexpression(mdl, [i=1:L], ux*cos(psi[i]) - (v[i] + la*r[i])*sin(psi[i]));    # X position
   dx[:,2] = @NLexpression(mdl, [i=1:L], ux*sin(psi[i]) + (v[i] + la*r[i])*cos(psi[i]));    # Y position
@@ -92,7 +96,7 @@ Date Create: 10/20/2017, Last Modified: 2/6/2017 \n
 # this vehicle model is controlled using steering rate and longitudinal jerk
 
 """
-function ThreeDOFv2{T<:Any}(mdl::JuMP.Model,n,x::Array{T,2},u::Array{T,2},params)
+function ThreeDOFv2{T<:Any}(mdl::JuMP.Model,n,R,x::Array{T,2},u::Array{T,2},params)
   if n.integrationMethod==:tm; L=size(x)[1]; else; L=size(x)[1]-1; end
   dx = Array(Any,L,n.numStates)
   # states
@@ -111,11 +115,15 @@ function ThreeDOFv2{T<:Any}(mdl::JuMP.Model,n,x::Array{T,2},u::Array{T,2},params
 
   # vertical tire load
   FZ_rl_con=@NLconstraint(mdl, [i=1:L], 0 <=  0.5*(FzR0 + KZX*(ax[i] - v[i]*r[i])) - KZYR*((FYF[i] + FYR[i])/m) - Fz_min)
+  newConstraint(R,FZ_rl_con,:FZ_rl_con);
   FZ_rr_con=@NLconstraint(mdl, [i=1:L], 0 <=  0.5*(FzR0 + KZX*(ax[i] - v[i]*r[i])) + KZYR*((FYF[i] + FYR[i])/m) - Fz_min)
+  newConstraint(R,FZ_rr_con,:FZ_rr_con);
 
   # linear tire and for now this also constrains the nonlinear tire model
   Fyf_con=@NLconstraint(mdl, [i=1:L], Fyf_min <=  (atan((v[i] + la*r[i])/(ux[i]+EP)) - sa[i])*Caf <= Fyf_max)
+  newConstraint(R,Fyf_con,:Fyf_con);
   Fyr_con=@NLconstraint(mdl, [i=1:L], Fyf_min <=   atan((v[i] - lb*r[i])/(ux[i]+EP))*Car <= Fyf_max)
+  newConstraint(R,Fyr_con,:Fyr_con);
 
   # nonlinear accleleration bounds
   min_ax=@NLexpression(mdl, [i = 1:L+1], AXC[5]*ux[i]^3 + AXC[6]*ux[i]^2 + AXC[7]*ux[i] + AXC[8])
