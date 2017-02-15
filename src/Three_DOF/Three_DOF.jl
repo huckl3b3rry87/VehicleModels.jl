@@ -24,7 +24,8 @@ function ThreeDOFv1{T<:Any}(mdl::JuMP.Model,n,R,x::Array{T,2},u::Array{T,2},para
 
   # parameters
   ax = zeros(length(psi)); sa = u[:,1];
-  pa=params[1]; ux=params[2]; # for now we assume ux = constant, but -> could do ux[i]!
+  pa=params[1]; UX=params[2];
+  ux=getvalue(UX)*ones(L,1);  # assume UX is a constant
   @unpack_Vpara pa            # vehicle parameters
 
   # nonlinear tire model TODO make sure this works for multiple interval
@@ -38,14 +39,14 @@ function ThreeDOFv1{T<:Any}(mdl::JuMP.Model,n,R,x::Array{T,2},u::Array{T,2},para
   newConstraint(R,FZ_rr_con,:FZ_rr_con);
 
   # linear tire and for now this also constrains the nonlinear tire model
-  Fyf_con=@NLconstraint(mdl, [i=1:L], Fyf_min <=  (atan((v[i] + la*r[i])/(ux[i]+EP)) - sa[i])*Caf <= Fyf_max)
+  Fyf_con=@NLconstraint(mdl, [i=1:L], Fyf_min <=  (atan((v[i] + la*r[i])/(ux[i]+EP)) - sa[i])*Caf <= Fyf_max);
   newConstraint(R,Fyf_con,:Fyf_con);
-  Fyr_con=@NLconstraint(mdl, [i=1:L], Fyf_min <=   atan((v[i] - lb*r[i])/(ux[i]+EP))*Car <= Fyf_max)
+  Fyr_con=@NLconstraint(mdl, [i=1:L], Fyf_min <=   atan((v[i] - lb*r[i])/(ux[i]+EP))*Car <= Fyf_max);
   newConstraint(R,Fyr_con,:Fyr_con);
 
-  dx[:,1] = @NLexpression(mdl, [i=1:L], ux*cos(psi[i]) - (v[i] + la*r[i])*sin(psi[i]));    # X position
-  dx[:,2] = @NLexpression(mdl, [i=1:L], ux*sin(psi[i]) + (v[i] + la*r[i])*cos(psi[i]));    # Y position
-  dx[:,3] = @NLexpression(mdl, [i=1:L], (FYF[i] + FYR[i])/m - r[i]*ux);                    # Lateral Speed
+  dx[:,1] = @NLexpression(mdl, [i=1:L], ux[i]*cos(psi[i]) - (v[i] + la*r[i])*sin(psi[i]));    # X position
+  dx[:,2] = @NLexpression(mdl, [i=1:L], ux[i]*sin(psi[i]) + (v[i] + la*r[i])*cos(psi[i]));    # Y position
+  dx[:,3] = @NLexpression(mdl, [i=1:L], (FYF[i] + FYR[i])/m - r[i]*ux[i]);                    # Lateral Speed
   dx[:,4] = @NLexpression(mdl, [i=1:L], (la*FYF[i]-lb*FYR[i])/Izz);                        # Yaw Rate
   dx[:,5] = @NLexpression(mdl, [i=1:L], r[i]);                                             # Yaw Angle
   return dx
@@ -73,16 +74,19 @@ function ThreeDOFv1(pa::Vpara,
     SA  = sp_SA[t]; # Steering Angle
     U  = sp_U[t];   # Longitudinal Speed
 
+    # set variables for tire equations
+    Ax = 0;
+
     # diff eqs.
     dx[1]   = U*cos(PSI) - (V + la*R)*sin(PSI);    # X position
     dx[2] 	= U*sin(PSI) + (V + la*R)*cos(PSI);    # Y position
     dx[3]   = (@F_YF() + @F_YR())/m - R*U;         # Lateral Speed
     dx[4]  	= (la*@F_YF()-lb*@F_YR())/Izz;         # Yaw Rate
-    dx[5]  	= r;                                   # Yaw Angle
+    dx[5]  	= R;                                   # Yaw Angle
   end
   tspan = (t0,tf)
-  prob = ODEProblem(f,x0,tspan)
-  DifferentialEquations.solve(prob,RK4())
+  prob = ODEProblem(f, x0,tspan)
+  DifferentialEquations.solve(prob)
 end
 
 """
