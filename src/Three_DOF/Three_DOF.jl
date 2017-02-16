@@ -47,8 +47,8 @@ function ThreeDOFv1{T<:Any}(mdl::JuMP.Model,n,R,x::Array{T,2},u::Array{T,2},para
   dx[:,1] = @NLexpression(mdl, [i=1:L], ux[i]*cos(psi[i]) - (v[i] + la*r[i])*sin(psi[i]));    # X position
   dx[:,2] = @NLexpression(mdl, [i=1:L], ux[i]*sin(psi[i]) + (v[i] + la*r[i])*cos(psi[i]));    # Y position
   dx[:,3] = @NLexpression(mdl, [i=1:L], (FYF[i] + FYR[i])/m - r[i]*ux[i]);                    # Lateral Speed
-  dx[:,4] = @NLexpression(mdl, [i=1:L], (la*FYF[i]-lb*FYR[i])/Izz);                        # Yaw Rate
-  dx[:,5] = @NLexpression(mdl, [i=1:L], r[i]);                                             # Yaw Angle
+  dx[:,4] = @NLexpression(mdl, [i=1:L], (la*FYF[i]-lb*FYR[i])/Izz);                           # Yaw Rate
+  dx[:,5] = @NLexpression(mdl, [i=1:L], r[i]);                                                # Yaw Angle
   return dx
 end
 
