@@ -1,5 +1,14 @@
+__precompile__(false) # this module is NOT safe to precompile
 module VehicleModels
-using Media, DifferentialEquations, Dierckx, Atom, Plots, Parameters, Interpolations, JuMP, NLOptControl
+
+using JuMP
+using Parameters
+using Interpolations
+
+#function __init__()
+  using NLOptControl
+  using DifferentialEquations
+#end
 
 macro def(name, definition)
   return quote

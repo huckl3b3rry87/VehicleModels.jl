@@ -60,6 +60,7 @@
     Car =  -7.8126e+04;	# cornering stiffness-- rear axle (N/rad)
     Fyf_min = -7500;
     Fyf_max = 7500;
+
     # constrained initial states
     x0_     = 200.;
     y0_     = 0.;
@@ -72,27 +73,10 @@
     jx0_    = 0.;
     r0_     = 0.;
 
-    ##TODO: Move some of these parameters somewhere else
-    # weights
-    w_goal = 1.; # should be zero when vehicle is not within goal distance during prediction horizon
-    w_psi  = 0.01;
-    w_time = 0.05;
-    w_haf  = 1.0e-5;
-    w_Fz   = 0.1;  #0.5 in paper
-    w_ce   = 1.;
-    w_sa   = 0.1;
-    w_sr   = 1.;
-    w_jx   = 0.01;
-
-    sm      = 5. # (m) distance to make sure we don't hit obstacle
+    # leave these parameters here
     Fz_min  = 1000.;
     Fz_off  = 100.;
     a_t     = Fz_min + 3*Fz_off;  # soft tire force constraint constants
     b_t     = Fz_off;
     EP      = 0.001;
-
-    # other parameters
-    L_Rd      = 5.;       # relaxation constant for LiDAR range (m)
-    L_R       = 100.;     # LiDAR range (m)
-    sigma     = 1.;       # 0.05 (m)small margin, if the vehicle is within this margin, then the target is considered to be reached
 end
