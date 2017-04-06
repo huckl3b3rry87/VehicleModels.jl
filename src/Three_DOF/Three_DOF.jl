@@ -85,7 +85,7 @@ function ThreeDOFv1(pa::Vpara,
     dx[5]  	= R;                                   # Yaw Angle
   end
   tspan = (t0,tf)
-  prob = ODEProblem(f, x0,tspan)
+  prob = ODEProblem(f,x0,tspan)
   DifferentialEquations.solve(prob)
 end
 
@@ -182,6 +182,6 @@ function ThreeDOFv2(pa::Vpara,
     dx[8]  	= Jx;                                  # Longitudinal Acceleration
   end
   tspan = (t0,tf)
-  prob = ODEProblem(f, x0,tspan)
+  prob = ODEProblem(f,x0,tspan)
   DifferentialEquations.solve(prob)
 end
