@@ -86,7 +86,7 @@ function ThreeDOFv1(pa::Vpara,
   end
   tspan = (t0,tf)
   prob = ODEProblem(f,x0,tspan)
-  DifferentialEquations.solve(prob)
+  DifferentialEquations.solve(prob,Tsit5())
 end
 
 """
@@ -183,5 +183,5 @@ function ThreeDOFv2(pa::Vpara,
   end
   tspan = (t0,tf)
   prob = ODEProblem(f,x0,tspan)
-  DifferentialEquations.solve(prob)
+  DifferentialEquations.solve(prob,Tsit5())
 end
