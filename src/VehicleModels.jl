@@ -1,14 +1,12 @@
-__precompile__(false) # this module is NOT safe to precompile
+isdefined(Base, :__precompile__) && __precompile__()
+
 module VehicleModels
 
 using JuMP
 using Parameters
 using Interpolations
-
-#function __init__()
-  using NLOptControl
-  using DifferentialEquations
-#end
+using NLOptControl
+using OrdinaryDiffEq, DiffEqBase
 
 macro def(name, definition)
   return quote

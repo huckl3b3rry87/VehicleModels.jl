@@ -51,7 +51,12 @@ function ThreeDOFv1{T<:Any}(mdl::JuMP.Model,n,R,x::Array{T,2},u::Array{T,2},para
   dx[:,5] = @NLexpression(mdl, [i=1:L], r[i]);                                                # Yaw Angle
   return dx
 end
-
+"""
+--------------------------------------------------------------------------------------\n
+Author: Huckleberry Febbo, Graduate Student, University of Michigan
+Date Create: 10/01/2016, Last Modified: 4/4/2017 \n
+--------------------------------------------------------------------------------------\n
+"""
 function ThreeDOFv1(pa::Vpara,
                     x0::Vector,
                      t::Vector,
@@ -86,7 +91,7 @@ function ThreeDOFv1(pa::Vpara,
   end
   tspan = (t0,tf)
   prob = ODEProblem(f,x0,tspan)
-  DifferentialEquations.solve(prob,Tsit5())
+  DiffEqBase.solve(prob,Tsit5())
 end
 
 """
@@ -144,6 +149,54 @@ function ThreeDOFv2{T<:Any}(mdl::JuMP.Model,n,R,x::Array{T,2},u::Array{T,2},para
   return dx
 end
 
+
+"""
+--------------------------------------------------------------------------------------\n
+Author: Huckleberry Febbo, Graduate Student, University of Michigan
+Date Create: 10/01/2016, Last Modified: 4/4/2017 \n
+--------------------------------------------------------------------------------------\n
+"""
+function ThreeDOFv2(pa::Vpara,
+                   x0::Vector,
+                   t::Vector,
+                   U::Matrix,
+                   t0::Float64,
+                   tf::Float64)
+    @unpack_Vpara pa
+
+    # create splines
+    sp_SR=Linear_Spline(t,U[:,1]);
+    sp_Jx=Linear_Spline(t,U[:,2]);
+
+    f = (t,x,dx) -> begin
+
+    # states
+    V   = x[3];  # 3. Lateral Speed
+    R   = x[4];  # 4. Yaw Rate
+    PSI = x[5];  # 5. Yaw angle
+    SA  = x[6];  # 6. Steering Angle
+    U   = x[7];  # 7. Longitudinal Speed
+    Ax  = x[8];  # 8. Longitudinal Acceleration
+
+    # controls
+    SR  = sp_SR[t];
+    Jx  = sp_Jx[t];
+
+    # diff eqs.
+    dx[1]   = U*cos(PSI) - (V + la*R)*sin(PSI);    # X position
+    dx[2] 	= U*sin(PSI) + (V + la*R)*cos(PSI);    # Y position
+    dx[3]   = (@F_YF() + @F_YR())/m - R*U;         # Lateral Speed
+    dx[4]  	= (la*@F_YF()-lb*@F_YR())/Izz;         # Yaw Rate
+    dx[5]  	= R;                                   # Yaw Angle
+    dx[6]   = SR;                                  # Steering Angle
+    dx[7]  	= Ax;                                  # Longitudinal Speed
+    dx[8]  	= Jx;                                  # Longitudinal Acceleration
+  end
+  tspan = (t0,tf)
+  prob = ODEProblem(f,x0,tspan)
+  DiffEqBase.solve(prob,Tsit5())
+end
+
 function ThreeDOFv2(pa::Vpara,
                    x0::Vector,
                    t::Vector,
@@ -152,7 +205,7 @@ function ThreeDOFv2(pa::Vpara,
                    t0::Float64,
                    tf::Float64)
     @unpack_Vpara pa
-
+warn("this function will be depreciated to combine all control inputs into a matrix")
     # create splines
     sp_SR=Linear_Spline(t,SR);
     sp_Jx=Linear_Spline(t,Jx);
@@ -183,5 +236,5 @@ function ThreeDOFv2(pa::Vpara,
   end
   tspan = (t0,tf)
   prob = ODEProblem(f,x0,tspan)
-  DifferentialEquations.solve(prob,Tsit5())
+  DiffEqBase.solve(prob,Tsit5())
 end
