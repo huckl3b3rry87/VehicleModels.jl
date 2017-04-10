@@ -34,15 +34,15 @@ function ThreeDOFv1{T<:Any}(mdl::JuMP.Model,n,R,x::Array{T,2},u::Array{T,2},para
 
   # vertical tire load
   FZ_rl_con=@NLconstraint(mdl, [i=1:L], 0 <=  0.5*(FzR0 + KZX*(ax[i] - v[i]*r[i])) - KZYR*((FYF[i] + FYR[i])/m) - Fz_min)
-  newConstraint(R,FZ_rl_con,:FZ_rl_con); #TODO consider appending for multiple interval
+  newConstraint!(R,FZ_rl_con,:FZ_rl_con); #TODO consider appending for multiple interval
   FZ_rr_con=@NLconstraint(mdl, [i=1:L], 0 <=  0.5*(FzR0 + KZX*(ax[i] - v[i]*r[i])) + KZYR*((FYF[i] + FYR[i])/m) - Fz_min)
-  newConstraint(R,FZ_rr_con,:FZ_rr_con);
+  newConstraint!(R,FZ_rr_con,:FZ_rr_con);
 
   # linear tire and for now this also constrains the nonlinear tire model
   Fyf_con=@NLconstraint(mdl, [i=1:L], Fyf_min <=  (atan((v[i] + la*r[i])/(ux[i]+EP)) - sa[i])*Caf <= Fyf_max);
-  newConstraint(R,Fyf_con,:Fyf_con);
+  newConstraint!(R,Fyf_con,:Fyf_con);
   Fyr_con=@NLconstraint(mdl, [i=1:L], Fyf_min <=   atan((v[i] - lb*r[i])/(ux[i]+EP))*Car <= Fyf_max);
-  newConstraint(R,Fyr_con,:Fyr_con);
+  newConstraint!(R,Fyr_con,:Fyr_con);
 
   dx[:,1] = @NLexpression(mdl, [i=1:L], ux[i]*cos(psi[i]) - (v[i] + la*r[i])*sin(psi[i]));    # X position
   dx[:,2] = @NLexpression(mdl, [i=1:L], ux[i]*sin(psi[i]) + (v[i] + la*r[i])*cos(psi[i]));    # Y position
@@ -60,14 +60,14 @@ Date Create: 10/01/2016, Last Modified: 4/4/2017 \n
 function ThreeDOFv1(pa::Vpara,
                     x0::Vector,
                      t::Vector,
-                    SA::Vector,
-                     U::Vector,
+                     U::Matrix,
                     t0::Float64,
                     tf::Float64)
+
     @unpack_Vpara pa
     # create splines
-    sp_SA=Linear_Spline(t,SA);
-    sp_U=Linear_Spline(t,U);
+    sp_SA=Linear_Spline(t,U[:,1]);
+    sp_U=Linear_Spline(t,U[:,2]);
 
     f = (t,x,dx) -> begin
     # states
@@ -122,21 +122,21 @@ function ThreeDOFv2{T<:Any}(mdl::JuMP.Model,n,R,x::Array{T,2},u::Array{T,2},para
 
   # vertical tire load
   FZ_rl_con=@NLconstraint(mdl, [i=1:L], 0 <=  0.5*(FzR0 + KZX*(ax[i] - v[i]*r[i])) - KZYR*((FYF[i] + FYR[i])/m) - Fz_min)
-  newConstraint(R,FZ_rl_con,:FZ_rl_con);
+  newConstraint!(R,FZ_rl_con,:FZ_rl_con);
   FZ_rr_con=@NLconstraint(mdl, [i=1:L], 0 <=  0.5*(FzR0 + KZX*(ax[i] - v[i]*r[i])) + KZYR*((FYF[i] + FYR[i])/m) - Fz_min)
-  newConstraint(R,FZ_rr_con,:FZ_rr_con);
+  newConstraint!(R,FZ_rr_con,:FZ_rr_con);
 
   # linear tire and for now this also constrains the nonlinear tire model
   Fyf_con=@NLconstraint(mdl, [i=1:L], Fyf_min <=  (atan((v[i] + la*r[i])/(ux[i]+EP)) - sa[i])*Caf <= Fyf_max)
-  newConstraint(R,Fyf_con,:Fyf_con);
+  newConstraint!(R,Fyf_con,:Fyf_con);
   Fyr_con=@NLconstraint(mdl, [i=1:L], Fyf_min <=   atan((v[i] - lb*r[i])/(ux[i]+EP))*Car <= Fyf_max)
-  newConstraint(R,Fyr_con,:Fyr_con);
+  newConstraint!(R,Fyr_con,:Fyr_con);
 
   # nonlinear accleleration bounds
   min_ax_con=@NLconstraint(mdl, [i=1:L], 0  <=  ax[i] - (AXC[5]*ux[i]^3 + AXC[6]*ux[i]^2 + AXC[7]*ux[i] + AXC[8]) )
-  newConstraint(R,min_ax_con,:min_ax_con); #TODO consider adding back L+1 for ps methods
+  newConstraint!(R,min_ax_con,:min_ax_con); #TODO consider adding back L+1 for ps methods
   max_ax_con=@NLconstraint(mdl, [i=1:L], ax[i] - (AXC[1]*ux[i]^3 + AXC[2]*ux[i]^2 + AXC[3]*ux[i] + AXC[4]) <= 0 )
-  newConstraint(R,max_ax_con,:max_ax_con);
+  newConstraint!(R,max_ax_con,:max_ax_con);
 
   dx[:,1] = @NLexpression(mdl, [i=1:L], ux[i]*cos(psi[i]) - (v[i] + la*r[i])*sin(psi[i]));    # X position
   dx[:,2] = @NLexpression(mdl, [i=1:L], ux[i]*sin(psi[i]) + (v[i] + la*r[i])*cos(psi[i]));    # Y position
@@ -167,48 +167,6 @@ function ThreeDOFv2(pa::Vpara,
     # create splines
     sp_SR=Linear_Spline(t,U[:,1]);
     sp_Jx=Linear_Spline(t,U[:,2]);
-
-    f = (t,x,dx) -> begin
-
-    # states
-    V   = x[3];  # 3. Lateral Speed
-    R   = x[4];  # 4. Yaw Rate
-    PSI = x[5];  # 5. Yaw angle
-    SA  = x[6];  # 6. Steering Angle
-    U   = x[7];  # 7. Longitudinal Speed
-    Ax  = x[8];  # 8. Longitudinal Acceleration
-
-    # controls
-    SR  = sp_SR[t];
-    Jx  = sp_Jx[t];
-
-    # diff eqs.
-    dx[1]   = U*cos(PSI) - (V + la*R)*sin(PSI);    # X position
-    dx[2] 	= U*sin(PSI) + (V + la*R)*cos(PSI);    # Y position
-    dx[3]   = (@F_YF() + @F_YR())/m - R*U;         # Lateral Speed
-    dx[4]  	= (la*@F_YF()-lb*@F_YR())/Izz;         # Yaw Rate
-    dx[5]  	= R;                                   # Yaw Angle
-    dx[6]   = SR;                                  # Steering Angle
-    dx[7]  	= Ax;                                  # Longitudinal Speed
-    dx[8]  	= Jx;                                  # Longitudinal Acceleration
-  end
-  tspan = (t0,tf)
-  prob = ODEProblem(f,x0,tspan)
-  DiffEqBase.solve(prob,Tsit5())
-end
-
-function ThreeDOFv2(pa::Vpara,
-                   x0::Vector,
-                   t::Vector,
-                   SR::Vector,
-                   Jx::Vector,
-                   t0::Float64,
-                   tf::Float64)
-    @unpack_Vpara pa
-warn("this function will be depreciated to combine all control inputs into a matrix")
-    # create splines
-    sp_SR=Linear_Spline(t,SR);
-    sp_Jx=Linear_Spline(t,Jx);
 
     f = (t,x,dx) -> begin
 

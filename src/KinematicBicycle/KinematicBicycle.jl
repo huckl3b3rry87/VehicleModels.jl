@@ -29,15 +29,14 @@ end
 function KinematicBicycle(pa::VparaKB,
                           x0::Vector,
                            t::Vector,
-                          SA::Vector,
-                          AX::Vector,
+                           U::Matrix,
                           t0::Float64,
                           tf::Float64)
     @unpack_VparaKB pa # vehicle parameters
 
     # create splines
-    sp_SA=Linear_Spline(t,SA);
-    sp_AX=Linear_Spline(t,AX);
+    sp_SA=Linear_Spline(t,U[:,1]);
+    sp_AX=Linear_Spline(t,U[:,2]);
 
     f = (t,x,dx) -> begin
 
