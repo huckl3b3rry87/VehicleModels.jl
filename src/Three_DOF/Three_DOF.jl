@@ -153,7 +153,7 @@ end
 """
 --------------------------------------------------------------------------------------\n
 Author: Huckleberry Febbo, Graduate Student, University of Michigan
-Date Create: 10/01/2016, Last Modified: 4/4/2017 \n
+Date Create: 10/01/2016, Last Modified: 4/11/2017 \n
 --------------------------------------------------------------------------------------\n
 """
 function ThreeDOFv2(pa::Vpara,
@@ -162,6 +162,10 @@ function ThreeDOFv2(pa::Vpara,
                    U::Matrix,
                    t0::Float64,
                    tf::Float64)
+    if length(t)!=size(U)[1]
+      error(" \n The length of the time vector must match the length of the control input \n")
+    end
+
     @unpack_Vpara pa
 
     # create splines
