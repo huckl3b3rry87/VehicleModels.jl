@@ -14,7 +14,7 @@ t_data[1:41] = 0:0.1:4;
 t_data=t_data[1:41];
 SR_data = float(dfs[1][:SR]);
 Jx_data = float(dfs[1][:Jx]);
-t_data=Vector{Float64}=0:0.1:40;
+t_data=0:0.1:40;
 X0=[0.0, 0.0, 0.0, 0.0, 1.2037,0.0,10.0,0.0];
 pa = Vpara(); # initialize parameter set
 t0=0.0;

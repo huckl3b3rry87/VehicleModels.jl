@@ -32,21 +32,3 @@ function threeDOF_test1()
 
   return maximum(A)
 end
-
-tol=0.0001;
-@test_approx_eq_eps(threeDOF_test1(),0,tol)
-
-
-#=
-using Plots
-gr()
-plot(x,y,label="v1")
-plot!(x2,y2,label="v2")
-
-
-t = [0.0,0.0604297,0.196798,0.395295,0.636471,0.896716,1.15055,1.37314,1.54269,1.64265,1.66667,1.76044,1.96707,2.25437,2.57859,2.89035,3.1422,3.29587,3.33333,3.49756,3.84089,4.27004,4.66998,4.93365,5.0];
-U=zeros(length(t),2);
-SR=copy((0.0-0.0)/0.01)*ones(length(t),);  # first order approximation of SR
-JX=0.0;
-U[:,1]=SR;U[:,2]=JX;
-=#

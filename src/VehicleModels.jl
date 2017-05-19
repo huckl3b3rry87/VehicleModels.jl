@@ -2,11 +2,11 @@ isdefined(Base, :__precompile__) && __precompile__()
 
 module VehicleModels
 
-using JuMP
 using Parameters
+using JuMP
 using Interpolations
-using NLOptControl
-using OrdinaryDiffEq, DiffEqBase
+using OrdinaryDiffEq
+using DiffEqBase
 
 macro def(name, definition)
   return quote
