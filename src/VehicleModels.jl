@@ -8,6 +8,7 @@ using Interpolations
 using OrdinaryDiffEq
 using DiffEqBase
 
+# To copy a particular piece of code (or function) in some location # credit: Christopher Rackauckas
 macro def(name, definition)
   return quote
     macro $name()
