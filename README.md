@@ -1,13 +1,11 @@
 # VehicleModels.jl
 
-[![Latest](https://img.shields.io/badge/docs-latest-blue.svg)](http://vehiclemodelsjl.readthedocs.io/en/latest/)
 
-NOTE: This package is a work in progress!
-
+[![Travis](https://travis-ci.org/JuliaMPC/VehicleModels.jl.svg?branch=master)](https://travis-ci.org/JuliaMPC/VehicleModels.jl)
 
 ## Documentation
 
-The full documentation can be found [here](http://vehiclemodelsjl.readthedocs.io/en/latest/).
+The full documentation can be found [here](https://juliampc.github.io/MPCDocs.jl/stable/).
 
 ## Installation
 
@@ -17,8 +15,9 @@ julia>Pkg.clone("https://github.com/huckl3b3rry87/VehicleModels.jl")
 ```
 
 ## Tutorial
+-> currently out of date!
 
-The examp for this package are available by typing:
+The example for this package are available by typing:
 ```julia
 julia>using IJulia
 julia>notebook(dir = Pkg.dir("VehicleModels")*"/examples")
@@ -27,11 +26,14 @@ julia>notebook(dir = Pkg.dir("VehicleModels")*"/examples")
 
 ## Citation
 
-If you find this package useful, please cite this paper (currently in review):
 
-    @article{Febbo2016,
-    title = { Moving Obstacle Avoidance for Large, High-Speed Autonomous Ground Vehicles,
-    author = {Huckleberry Febbo, Jiechao Liu, Paramsothy Jayakumar, Jeffrey L. Stein, and Tulga Ersal},
-    conference = {Dynamic Systems and Control Conference},
-    year = {2016},
-    }
+If you find this package useful, please cite this paper:
+
+```
+@Conference{Febbo2017,
+  author    = {Huckleberry Febbo, Jiechao Liu, Paramsothy Jayakumar, Jeffrey L. Stein, Tulga Ersal},
+  title     = {Moving Obstacle Avoidance for Large, High-Speed Autonomous Ground Vehicles},
+  year      = {2017},
+  publisher = {IEEE},
+}
+```
