@@ -1,4 +1,4 @@
-@def F_YF begin #(V, U, Ax, R, SA)		# fRont tire force
+@def F_YF begin #(V, U, Ax, R, SA)		# front tire force
 
   if length(Ax) != 1
     Fyf = zeros(Float64, (length(Ax),1))
