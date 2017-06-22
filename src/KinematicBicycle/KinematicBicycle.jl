@@ -11,7 +11,7 @@ Date Create: 2/9/2017, Last Modified: 5/31/2017 \n
 """
 function KinematicBicycle{T<:Any}(n,x::Array{T,2},u::Array{T,2})
   if n.s.integrationMethod==:tm; L=size(x)[1]; else; L=size(x)[1]-1; end
-  dx = Array(Any,L,n.numStates)
+  dx = Array{Any}(L,n.numStates)
   psi = x[:,3]; ux = x[:,4]; sa = u[:,1]; ax = u[:,2];
 
   @unpack_VparaKB n.params[1] # vehicle parameters
