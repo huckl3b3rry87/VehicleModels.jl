@@ -4,9 +4,7 @@ os:
   - linux
   - osx
 julia:
-  - 0.5
   - 0.6
-  - release
 notifications:
   email: false
 after_success:
