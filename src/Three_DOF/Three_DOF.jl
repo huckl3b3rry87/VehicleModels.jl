@@ -19,7 +19,7 @@ Date Create: 10/20/2017, Last Modified: 5/31/2017 \n
 """
 function ThreeDOFv1{T<:Any}(n,x::Array{T,2},u::Array{T,2})
   if n.s.integrationMethod==:tm; L=size(x)[1]; else; L=size(x)[1]-1; end
-  dx = Array(Any,L,n.numStates)
+  dx = Array{Any}(L,n.numStates)
   v = x[:,3]; r = x[:,4]; psi = x[:,5];
 
   # parameters
@@ -105,7 +105,7 @@ Date Create: 10/20/2017, Last Modified:  5/31/2017 \n
 """
 function ThreeDOFv2{T<:Any}(n,x::Array{T,2},u::Array{T,2})
   if n.s.integrationMethod==:tm; L=size(x)[1]; else; L=size(x)[1]-1; end
-  dx = Array(Any,L,n.numStates)
+  dx = Array{Any}(L,n.numStates)
   # states
   v = x[:,3]; r = x[:,4]; psi = x[:,5]; sa = x[:,6]; ux = x[:,7]; ax = x[:,8];
 

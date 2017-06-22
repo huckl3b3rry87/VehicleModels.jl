@@ -5,7 +5,7 @@ function threeDOF_test1()
   t=Vector(Ranges.linspace(t0,tf,100));
   U1=zeros(length(t),2);
   sa(tt)=.15*sin(3*tt);
-  U1[:,1]=sa(t)
+  U1[:,1]=sa.(t)
   U1[:,2]=10.0;
   X0=[0.0, 0.0, 0.0, 0.0,1.2038];
 
@@ -15,7 +15,7 @@ function threeDOF_test1()
 
   U=zeros(length(t),2);
   sr(tt)=0.45*cos(3*tt);
-  U[:,1]=sr(t)
+  U[:,1]=sr.(t)
   U[:,1]=0.0;
   U[:,2]=0.0;
   X0=[0.0, 0.0, 0.0, 0.0, 1.2038,0.0,10.0,0.0];

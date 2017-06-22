@@ -26,7 +26,6 @@ julia>notebook(dir = Pkg.dir("VehicleModels")*"/examples")
 
 ## Citation
 
-
 If you find this package useful, please cite this paper:
 
 ```

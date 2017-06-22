@@ -7,15 +7,7 @@ using JuMP
 using Interpolations
 using OrdinaryDiffEq
 using DiffEqBase
-
-# To copy a particular piece of code (or function) in some location # credit: Christopher Rackauckas
-macro def(name, definition)
-  return quote
-    macro $name()
-      esc($(Expr(:quote,definition)))
-    end
-  end
-end
+using Ranges
 
 # funcitons in the VehicleModels.jl package
 include("Three_DOF/Three_DOF.jl")
@@ -60,10 +52,5 @@ export
   # KinematicBicycle
   @unpack_VparaKB,
   @pack_VparaKB
-
-  # REMOVE THE FINAL COMMA!
-#############################
-# types/functions/constants #
-#############################
 
 end # module
