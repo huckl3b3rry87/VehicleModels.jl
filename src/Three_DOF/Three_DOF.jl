@@ -54,17 +54,17 @@ end
 """
 --------------------------------------------------------------------------------------\n
 Author: Huckleberry Febbo, Graduate Student, University of Michigan
-Date Create: 10/01/2016, Last Modified: 4/4/2017 \n
+Date Create: 10/01/2016, Last Modified: 6/22/2017 \n
 --------------------------------------------------------------------------------------\n
 """
-function ThreeDOFv1(pa::Vpara,
+function ThreeDOFv1(n,
                     x0::Vector,
                      t::Vector,
                      U::Matrix,
                     t0::Float64,
                     tf::Float64)
 
-    @unpack_Vpara pa
+    @unpack_Vpara n.params[1]
     # create splines
     sp_SA=Linear_Spline(t,U[:,1]);
     sp_U=Linear_Spline(t,U[:,2]);
@@ -151,10 +151,10 @@ end
 """
 --------------------------------------------------------------------------------------\n
 Author: Huckleberry Febbo, Graduate Student, University of Michigan
-Date Create: 10/01/2016, Last Modified: 4/11/2017 \n
+Date Create: 10/01/2016, Last Modified: 6/22/2017 \n
 --------------------------------------------------------------------------------------\n
 """
-function ThreeDOFv2(pa::Vpara,
+function ThreeDOFv2(n,
                    x0::Vector,
                    t::Vector,
                    U::Matrix,
@@ -164,7 +164,7 @@ function ThreeDOFv2(pa::Vpara,
       error(" \n The length of the time vector must match the length of the control input \n")
     end
 
-    @unpack_Vpara pa
+    @unpack_Vpara n.params[1]
 
     # create splines
     sp_SR=Linear_Spline(t,U[:,1]);

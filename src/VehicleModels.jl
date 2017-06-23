@@ -8,6 +8,7 @@ using Interpolations
 using OrdinaryDiffEq
 using DiffEqBase
 using Ranges
+using NLOptControl  # newConstraint!()
 
 # funcitons in the VehicleModels.jl package
 include("Three_DOF/Three_DOF.jl")
