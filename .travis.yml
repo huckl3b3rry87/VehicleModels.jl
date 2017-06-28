@@ -1,5 +1,6 @@
 # Documentation: http://docs.travis-ci.com/user/languages/julia/
 language: julia
+sudo: required
 os:
   - linux
   - osx
@@ -7,6 +8,9 @@ julia:
   - 0.6
 notifications:
   email: false
+addons:
+      apt_packages:
+        - gfortran
 after_success:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
   - julia -e 'Pkg.clone(pwd())'
