@@ -3,9 +3,12 @@ language: julia
 sudo: required
 os:
   - linux
-  - osx
 julia:
   - 0.6
+  - nightly
+matrix:
+allow_failures:
+  - julia: nightly
 notifications:
   email: false
 addons:
@@ -14,6 +17,6 @@ addons:
 after_success:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
   - julia -e 'Pkg.clone(pwd())'
-  - julia -e 'Pkg.add("Ipopt")' # temp fix
+  - julia -e 'Pkg.add("Ipopt")'   # temp fix
   - julia -e 'Pkg.build("Ipopt")' # temp fix
   - julia -e 'Pkg.test("VehicleModels")'

@@ -54,5 +54,5 @@ function KinematicBicycle(pa::VparaKB,
   end
   tspan = (t0,tf)
   prob = ODEProblem(f,x0,tspan)
-  DifferentialEquations.solve(prob,RK4())
+  DifferentialEquations.solve(prob,Tsit5())
 end
