@@ -52,7 +52,6 @@ export
 
   # KinematicBicycle
   @unpack_VparaKB,
-  @pack_VparaKB,
-  KB_model
-
+  @pack_VparaKB
+  
 end # module
