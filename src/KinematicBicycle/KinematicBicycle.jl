@@ -1,26 +1,24 @@
 include("parameters.jl")
 
 """
-dx=KinematicBicycle(n,x,u)
 --------------------------------------------------------------------------------------\n
 Original Authors: BARC Project, Berkely MPC Laboratory -> https://github.com/MPC-Berkeley/barc
 Modified for NLOptControl.jl by: Huckleberry Febbo, Graduate Student, University of Michigan
-Date Create: 2/9/2017, Last Modified: 5/31/2017 \n
+Date Create: 2/9/2017, Last Modified: 6/30/2017 \n
 --------------------------------------------------------------------------------------\n
 # this vehicle model is controlled using steering angle and longitudinal acceleration
 """
-function KinematicBicycle{T<:Any}(n,x::Array{T,2},u::Array{T,2})
-  if n.s.integrationMethod==:tm; L=size(x)[1]; else; L=size(x)[1]-1; end
-  dx = Array{Any}(L,n.numStates)
-  psi = x[:,3]; ux = x[:,4]; sa = u[:,1]; ax = u[:,2];
+function KinematicBicycle(pa::VparaKB)
 
-  @unpack_VparaKB n.params[1] # vehicle parameters
+  @unpack_VparaKB pa # vehicle parameters
 
+  dx=Array{Expr}(4);
   # Reference: R.Rajamani, Vehicle Dynamics and Control, set. Mechanical Engineering Series, Spring, 2011, page 2
-  dx[:,1] = @NLexpression(n.mdl, [i=1:L], ux[i]*cos(psi[i] + (atan(la/(la+lb)*tan(sa[i])))));   # X position
-  dx[:,2] = @NLexpression(n.mdl, [i=1:L], ux[i]*sin(psi[i] + (atan(la/(la+lb)*tan(sa[i])))));   # Y position
-  dx[:,3] = @NLexpression(n.mdl, [i=1:L], (ux[i]/lb)*sin((atan(la/(la+lb)*tan(sa[i])))));       # Yaw Angle
-  dx[:,4] = @NLexpression(n.mdl, [i=1:L], ax[i]);                                               # Longitudinal Speed
+  dx[1]=:(ux[j]*cos(psi[j] + (atan($la/($la+$lb)*tan(sa[j])))));   # X position
+  dx[2]=:(ux[j]*sin(psi[j] + (atan($la/($la+$lb)*tan(sa[j])))));   # Y position
+  dx[3]=:((ux[j]/$lb)*sin((atan($la/($la+$lb)*tan(sa[j])))));      # Yaw Angle
+  dx[4]=:(ax[j]);                                                  # Longitudinal Speed
+
   return dx
 end
 
