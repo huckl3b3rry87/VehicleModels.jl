@@ -25,7 +25,7 @@ function ThreeDOFv1{T<:Any}(n,x::Array{T,2},u::Array{T,2})
   # parameters
   ax = zeros(length(psi)); sa = u[:,1];
   pa=params[1]; UX=params[2];
-  ux=getvalue(UX)*ones(L,1);  # assume UX is a constant
+  ux=getvalue(UX)*ones(L,1);           # assume UX is a constant
   @unpack_Vpara n.params[1]            # vehicle parameters
 
   # nonlinear tire model
@@ -147,7 +147,30 @@ function ThreeDOFv2{T<:Any}(n,x::Array{T,2},u::Array{T,2})
   return dx
 end
 
+function ThreeDOFv2(n::NLOpt)
 
+  @unpack_Vpara n.params[1]
+
+  # lateral tire load
+  FYF=:(($PD2*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff)^2 + $PD1*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff))*sin($PC1*atan(((($PK1*sin(2*atan($PK2*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff))))/((($PD2*$PC1*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff)^2 + $PD1*$PC1*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff)) + (($PD2*$PC1*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff)^2 + $PD1*$PC1*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff)))/((($PD2*$PC1*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff)^2 + $PD1*$PC1*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff))^2 + $EP^2)^(0.5))*0.001)+$EP))*((atan((v[j] + $la*r[j])/(ux[j]+$EP)) - sa[j]) + $PH2*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff) + $PH1)) - (($PE2*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff) + $PE1)*(1 - $PE3)*(((atan((v[j] + $la*r[j])/(ux[j]+$EP)) - sa[j]) + $PH2*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff) + $PH1))/((((atan((v[j] + $la*r[j])/(ux[j]+$EP)) - sa[j]) + $PH2*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff) + $PH1)^2 + $EP^2)^(0.5)))*(((($PK1*sin(2*atan($PK2*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff))))/((($PD2*$PC1*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff)^2 + $PD1*$PC1*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff)) + (($PD2*$PC1*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff)^2 + $PD1*$PC1*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff)))/((($PD2*$PC1*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff)^2 + $PD1*$PC1*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff))^2 + $EP^2)^(0.5))*0.001)+$EP))*((atan((v[j] + $la*r[j])/(ux[j]+$EP)) - sa[j]) + $PH2*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff) + $PH1)) - atan(((($PK1*sin(2*atan($PK2*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff))))/((($PD2*$PC1*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff)^2 + $PD1*$PC1*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff)) + (($PD2*$PC1*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff)^2 + $PD1*$PC1*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff)))/((($PD2*$PC1*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff)^2 + $PD1*$PC1*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff))^2 + $EP^2)^(0.5))*0.001)+$EP))*((atan((v[j] + $la*r[j])/(ux[j]+$EP)) - sa[j]) + $PH2*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff) + $PH1)))))) + ($PV2*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff)^2 + $PV1*($FzF0 - (ax[j] - v[j]*r[j])*$dFzx_coeff)));
+  FYR=:(($PD2*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff)^2 + $PD1*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff))*sin($PC1*atan(((($PK1*sin(2*atan($PK2*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff))))/((($PD2*$PC1*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff)^2 + $PD1*$PC1*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff)) + (($PD2*$PC1*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff)^2 + $PD1*$PC1*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff)))/((($PD2*$PC1*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff)^2 + $PD1*$PC1*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff))^2+$EP^2)^(0.5))*0.001)+$EP))*((atan((v[j] - $lb*r[j])/(ux[j]+$EP))) + $PH2*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff) + $PH1)) - (($PE2*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff) + $PE1)*(1 - $PE3*(((atan((v[j] - $lb*r[j])/(ux[j]+$EP))) + $PH2*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff) + $PH1))/((((atan((v[j] - $lb*r[j])/(ux[j]+$EP))) + $PH2*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff) + $PH1)^2 + $EP^2)^(0.5))))*(((($PK1*sin(2*atan($PK2*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff))))/((($PD2*$PC1*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff)^2 + $PD1*$PC1*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff)) + (($PD2*$PC1*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff)^2 + $PD1*$PC1*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff)))/((($PD2*$PC1*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff)^2 + $PD1*$PC1*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff))^2+$EP^2)^(0.5))*0.001)+$EP))*((atan((v[j] - $lb*r[j])/(ux[j]+$EP))) + $PH2*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff) + $PH1)) - atan(((($PK1*sin(2*atan($PK2*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff))))/((($PD2*$PC1*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff)^2 + $PD1*$PC1*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff)) + (($PD2*$PC1*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff)^2 + $PD1*$PC1*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff)))/((($PD2*$PC1*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff)^2 + $PD1*$PC1*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff))^2+$EP^2)^(0.5))*0.001)+$EP))*((atan((v[j] - $lb*r[j])/(ux[j]+$EP))) + $PH2*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff) + $PH1)))))) + ($PV2*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff)^2 + $PV1*($FzR0 + (ax[j] - v[j]*r[j])*$dFzx_coeff)));
+
+  dx=Array{Expr}(8);
+  dx[1] = :(ux[j]*cos(psi[j]) - (v[j] + $la*r[j])*sin(psi[j]));   # X position
+  dx[2] = :(ux[j]*sin(psi[j]) + (v[j] + $la*r[j])*cos(psi[j]));   # Y position
+  dx[3] = :(($FYF + $FYR)/$m - r[j]*ux[j]);                       # Lateral Speed
+  dx[4] = :(($la*$FYF[j]-$lb*$FYR[j])/$Izz);                      # Yaw Rate
+  dx[5] = :(r[j]);                                                # Yaw Angle
+  dx[6] = :(sr[j]);                                               # Steering Angle
+  dx[7] = :(ax[j]);                                               # Longitudinal Speed
+  dx[8] = :(jx[j]);                                               # Longitudinal Acceleration
+
+  # vertical tire load
+  FZ_RL=:(0.5*($FzR0 + $KZX*(ax[j] - v[j]*r[j])) - $KZYR*(($FYF + $FYR)/$m))
+  FZ_RR=:(0.5*($FzR0 + $KZX*(ax[j] - v[j]*r[j])) + $KZYR*(($FYF + $FYR)/$m))
+
+  return dx,FZ_RL,FZ_RR
+end
 """
 --------------------------------------------------------------------------------------\n
 Author: Huckleberry Febbo, Graduate Student, University of Michigan
