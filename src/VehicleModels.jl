@@ -33,6 +33,7 @@ export
   # Three DOF
   ThreeDOFv1,
   ThreeDOFv2,
+  ThreeDOFv2_expr,
 
   # KinematicBicycle
   KinematicBicycle,
@@ -53,5 +54,5 @@ export
   # KinematicBicycle
   @unpack_VparaKB,
   @pack_VparaKB
-  
+
 end # module

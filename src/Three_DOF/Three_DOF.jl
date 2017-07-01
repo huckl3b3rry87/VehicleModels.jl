@@ -103,7 +103,7 @@ Date Create: 10/20/2017, Last Modified:  5/31/2017 \n
 # this vehicle model is controlled using steering rate and longitudinal jerk
 
 """
-function ThreeDOFv2{T<:Any}(n,x::Array{T,2},u::Array{T,2})
+function ThreeDOFv2_OLD{T<:Any}(n,x::Array{T,2},u::Array{T,2})
   if n.s.integrationMethod==:tm; L=size(x)[1]; else; L=size(x)[1]-1; end
   dx = Array{Any}(L,n.numStates)
   # states
@@ -147,7 +147,7 @@ function ThreeDOFv2{T<:Any}(n,x::Array{T,2},u::Array{T,2})
   return dx
 end
 
-function ThreeDOFv2(n::NLOpt)
+function ThreeDOFv2_expr(n::NLOpt)
 
   @unpack_Vpara n.params[1]
 
@@ -169,7 +169,11 @@ function ThreeDOFv2(n::NLOpt)
   FZ_RL=:(0.5*($FzR0 + $KZX*(ax[j] - v[j]*r[j])) - $KZYR*(($FYF + $FYR)/$m))
   FZ_RR=:(0.5*($FzR0 + $KZX*(ax[j] - v[j]*r[j])) + $KZYR*(($FYF + $FYR)/$m))
 
-  return dx,FZ_RL,FZ_RR
+  # linear tire forces
+  Fyf_linear=:((atan((v[j] + $la*r[j])/(ux[j]+$EP)) - sa[j])*$Caf);
+  Fyr_linear=:(atan((v[j] - $lb*r[j])/(ux[j]+$EP))*$Car);
+
+  return dx,FZ_RL,FZ_RR,Fyf_linear,Fyr_linear
 end
 """
 --------------------------------------------------------------------------------------\n
