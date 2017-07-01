@@ -173,7 +173,11 @@ function ThreeDOFv2_expr(n::NLOpt)
   Fyf_linear=:((atan((v[j] + $la*r[j])/(ux[j]+$EP)) - sa[j])*$Caf);
   Fyr_linear=:(atan((v[j] - $lb*r[j])/(ux[j]+$EP))*$Car);
 
-  return dx,FZ_RL,FZ_RR,Fyf_linear,Fyr_linear
+  # nonlinear accleleration bounds
+  min_ax=:(ax[j] - ($AXC[5]*ux[j]^3 + $AXC[6]*ux[j]^2 + $AXC[7]*ux[j] + $AXC[8]))
+  max_ax=:(ax[j] - ($AXC[1]*ux[j]^3 + $AXC[2]*ux[j]^2 + $AXC[3]*ux[j] + $AXC[4]))
+
+  return dx,FZ_RL,FZ_RR,Fyf_linear,Fyr_linear,min_ax,max_ax
 end
 """
 --------------------------------------------------------------------------------------\n
