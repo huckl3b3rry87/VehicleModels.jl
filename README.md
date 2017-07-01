@@ -11,7 +11,7 @@ The full documentation can be found [here](https://juliampc.github.io/MPCDocs.jl
 
 In Julia, you can install the VehicleModels.jl package by typing:
 ```julia
-julia>Pkg.clone("https://github.com/huckl3b3rry87/VehicleModels.jl")
+julia>Pkg.clone("https://github.com/juliaMPC/VehicleModels.jl")
 ```
 
 ## Tutorial
