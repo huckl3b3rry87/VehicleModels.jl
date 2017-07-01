@@ -159,7 +159,7 @@ function ThreeDOFv2(n::NLOpt)
   dx[1] = :(ux[j]*cos(psi[j]) - (v[j] + $la*r[j])*sin(psi[j]));   # X position
   dx[2] = :(ux[j]*sin(psi[j]) + (v[j] + $la*r[j])*cos(psi[j]));   # Y position
   dx[3] = :(($FYF + $FYR)/$m - r[j]*ux[j]);                       # Lateral Speed
-  dx[4] = :(($la*$FYF[j]-$lb*$FYR[j])/$Izz);                      # Yaw Rate
+  dx[4] = :(($la*$FYF-$lb*$FYR)/$Izz);                            # Yaw Rate
   dx[5] = :(r[j]);                                                # Yaw Angle
   dx[6] = :(sr[j]);                                               # Steering Angle
   dx[7] = :(ax[j]);                                               # Longitudinal Speed
