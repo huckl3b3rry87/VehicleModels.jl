@@ -58,8 +58,8 @@
 
     Caf =  -8.4138e+04;	# cornering stiffness--front axle (N/rad)
     Car =  -7.8126e+04;	# cornering stiffness-- rear axle (N/rad)
-    Fyf_min = -7500;
-    Fyf_max = 7500;
+    #Fyf_min = -7500;Fyf_max = 7500;
+    Fy_min = -7500;Fy_max = 7500;
 
     # constrained initial states
     x0_     = 200.;

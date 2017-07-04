@@ -166,18 +166,19 @@ function ThreeDOFv2_expr(n::NLOpt)
   dx[8] = :(jx[j]);                                               # Longitudinal Acceleration
 
   # vertical tire load
-  FZ_RL=:(0.5*($FzR0 + $KZX*(ax[j] - v[j]*r[j])) - $KZYR*(($FYF + $FYR)/$m))
-  FZ_RR=:(0.5*($FzR0 + $KZX*(ax[j] - v[j]*r[j])) + $KZYR*(($FYF + $FYR)/$m))
+  FZ_RL=:(0 <= 0.5*($FzR0 + $KZX*(ax[j] - v[j]*r[j])) - $KZYR*(($FYF + $FYR)/$m) - $Fz_min)
+  FZ_RR=:(0 <= 0.5*($FzR0 + $KZX*(ax[j] - v[j]*r[j])) + $KZYR*(($FYF + $FYR)/$m) - $Fz_min)
 
   # linear tire forces
-  Fyf_linear=:((atan((v[j] + $la*r[j])/(ux[j]+$EP)) - sa[j])*$Caf);
-  Fyr_linear=:(atan((v[j] - $lb*r[j])/(ux[j]+$EP))*$Car);
+  Fyf_linear=:( $Fy_min <= (atan((v[j] + $la*r[j])/(ux[j]+$EP)) - sa[j])*$Caf <= $Fy_max);
+  Fyr_linear=:( $Fy_min <= atan((v[j] - $lb*r[j])/(ux[j]+$EP))*$Car <= $Fy_max);
 
   # nonlinear accleleration bounds
-  min_ax=:(ax[j] - ($AXC[5]*ux[j]^3 + $AXC[6]*ux[j]^2 + $AXC[7]*ux[j] + $AXC[8]))
-  max_ax=:(ax[j] - ($AXC[1]*ux[j]^3 + $AXC[2]*ux[j]^2 + $AXC[3]*ux[j] + $AXC[4]))
+  min_ax=:( 0 <= ax[j] - ($AXC[5]*ux[j]^3 + $AXC[6]*ux[j]^2 + $AXC[7]*ux[j] + $AXC[8]))
+  max_ax=:(ax[j] - ($AXC[1]*ux[j]^3 + $AXC[2]*ux[j]^2 + $AXC[3]*ux[j] + $AXC[4]) <= 0)
 
-  return dx,FZ_RL,FZ_RR,Fyf_linear,Fyr_linear,min_ax,max_ax
+  con=[FZ_RL,FZ_RR,Fyf_linear,Fyr_linear,min_ax,max_ax]
+  return dx,con
 end
 """
 --------------------------------------------------------------------------------------\n
