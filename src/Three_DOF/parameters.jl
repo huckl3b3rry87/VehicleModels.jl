@@ -22,7 +22,7 @@
     sa_max   = 30*pi/180
     psi_min  = -2*pi
     psi_max  = 2*pi
-    u_min    = 5.   #5.
+    u_min    = 0.01   #5.
     u_max    = 29.
     sr_min   = -5*pi/180
     sr_max   = 5*pi/180
@@ -78,5 +78,5 @@
     Fz_off  = 100.;
     a_t     = Fz_min + 3*Fz_off;  # soft tire force constraint constants
     b_t     = Fz_off;
-    EP      = 0.001;
+    EP      = 0.1;
 end
