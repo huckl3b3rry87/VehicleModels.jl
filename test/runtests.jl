@@ -1,7 +1,7 @@
 using VehicleModels
 using Base.Test
 
-tol=0.0005;
+tol=0.1;
 
 # test the Three DOF Vehicle Model
 include("ThreeDOF.jl")
