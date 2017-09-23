@@ -147,7 +147,7 @@ function ThreeDOFv2_OLD{T<:Any}(n,x::Array{T,2},u::Array{T,2})
   return dx
 end
 
-function ThreeDOFv2_expr(n::NLOpt)
+function ThreeDOFv2_expr(n)
 
   @unpack_Vpara n.params[1]
 
