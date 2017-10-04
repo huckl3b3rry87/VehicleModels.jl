@@ -8,7 +8,7 @@ using Interpolations
 using OrdinaryDiffEq
 using DiffEqBase
 using Ranges
-using NLOptControl  # to use newConstraint!()
+using NLOptControl  # to use newConstraint!() and interpolateLagrange!() for checkCrash()
 
 # funcitons in the VehicleModels.jl package
 include("Three_DOF/Three_DOF.jl")
@@ -29,7 +29,8 @@ export
   # Functions
   ###########
   Linear_Spline,
-
+  checkCrash,
+  
   # Three DOF
   ThreeDOFv1,
   ThreeDOFv2,
