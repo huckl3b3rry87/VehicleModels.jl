@@ -23,7 +23,7 @@ function Linear_Spline(t::Vector,V::Vector)
   V_new = Array{Float64}(length(t)-length(rm_idx));
 
   q=1;
-  for i in 1:length(V) #TODO could put an error message here if V and t are different sizes
+  for i in 1:length(V) #TODO put an error message here if V and t are different sizes
       if !M[i]
           t_new[q] = t[i];
           V_new[q] = V[i];
@@ -42,14 +42,13 @@ end
 
 function checkCrash(n, c, pts, sm)
 
-  interpolateLagrange!(n;numPts=Int64(pts/n.Ni))
-
-  # put X and Y polynomials points into a vector
-  temp = [n.r.X_polyPts[1][int] for int in 1:length(n.Nck)];
-  X=[idx for tempM in temp for idx=tempM];
-
-  temp = [n.r.X_polyPts[2][int] for int in 1:length(n.Nck)];
-  Y=[idx for tempM in temp for idx=tempM];
+# redo interpolation with desired number of points
+  if n.s.integrationMethod == :ps
+      interpolateLagrange!(n;numPts=Int64(pts/n.Ni))
+  else
+      interpolateLinear!(n;numPts=pts)
+  end
+  X = n.r.X_pts[:,1]; Y = n.r.X_pts[:,2];
 
   crash_tmp = zeros(pts,1);
   for i = 1:pts
