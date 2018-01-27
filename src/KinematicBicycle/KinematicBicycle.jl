@@ -34,7 +34,7 @@ function KinematicBicycle(pa::VparaKB,
     sp_SA=Linear_Spline(t,U[:,1]);
     sp_AX=Linear_Spline(t,U[:,2]);
 
-    f = (t,x,dx) -> begin
+    f = (dx,x,p,t) -> begin
 
     # states
     psi = x[3];  # 3. Yaw Angle
