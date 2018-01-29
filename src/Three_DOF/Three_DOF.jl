@@ -69,7 +69,7 @@ function ThreeDOFv1(n,
     sp_SA=Linear_Spline(t,U[:,1]);
     sp_U=Linear_Spline(t,U[:,2]);
 
-    f = (t,x,dx) -> begin
+    f = (dx,x,p,t) -> begin
     # states
     V   = x[3];  # 3. Lateral Speed
     R   = x[4];  # 4. Yaw Rate
@@ -208,7 +208,7 @@ function ThreeDOFv2(n,
     sp_SR=Linear_Spline(t,U[:,1]);
     sp_Jx=Linear_Spline(t,U[:,2]);
 
-    f = (t,x,dx) -> begin
+    f = (dx,x,p,t) -> begin
 
     # states
     V   = x[3];  # 3. Lateral Speed
