@@ -15,7 +15,8 @@ function Linear_Spline(t::Vector,V::Vector)
   rm_idx = find(M)
 
   if (length(t)==length(rm_idx))
-    error("No time has elapsed and there will be an issue with interpolation! -----> Do not even try to simulate this data!")
+    error("No time has elapsed and there will be an issue with interpolation. \n
+          Cannot simulate the vehicle.")
   end
 
   # initialize vetors
@@ -36,7 +37,7 @@ function Linear_Spline(t::Vector,V::Vector)
 
   # make interpolant using Interpolations.jl
   knots = (t_new,)
-  interpolate(knots,V_new,Gridded(Linear()))
+  return interpolate(knots,V_new,Gridded(Linear()))
 end
 
 """
