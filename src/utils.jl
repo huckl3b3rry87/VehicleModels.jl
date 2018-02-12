@@ -53,7 +53,7 @@ function checkCrash(n, c, sm; kwargs...)
     else; plant = get(kw,:plant,0);
     end
 
-    if plant  # NOTE currently not doing any interpolation here to get a more accurate prediction
+    if plant
         t = n.r.dfs_plant[end][:t]
         X = n.r.dfs_plant[end][:x]
         Y = n.r.dfs_plant[end][:y]
@@ -64,12 +64,11 @@ function checkCrash(n, c, sm; kwargs...)
             Y_obs= c.o.Y0[obs] .+ c.o.s_y[obs].*t
             if minimum((X-X_obs).^2./(c.o.B[obs]+sm).^2 + (Y-Y_obs).^2./(c.o.A[obs]+sm).^2) < 1
                 crash_tmp[obs] = 1
-                println(minimum((X-X_obs).^2./(c.o.B[obs]+sm).^2 + (Y-Y_obs).^2./(c.o.A[obs]+sm).^2))
             end
         end
         if maximum(crash_tmp)>0
             crash = true;
-            print("the vehicle crashed! \n")
+            print("the vehicle crashed! \n", println(minimum((X-X_obs).^2./(c.o.B[obs]+sm).^2 + (Y-Y_obs).^2./(c.o.A[obs]+sm).^2)))
         else
             crash = false;
         end
