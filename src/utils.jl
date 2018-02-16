@@ -64,7 +64,7 @@ function checkCrash(n, c, sm; kwargs...)
             Y_obs= c.o.Y0[obs] .+ c.o.s_y[obs].*t
             if minimum((X-X_obs).^2./(c.o.B[obs]+sm).^2 + (Y-Y_obs).^2./(c.o.A[obs]+sm).^2) < 1
                 crash_tmp[obs] = 1
-                print("the vehicle crashed! \n", println(minimum((X-X_obs).^2./(c.o.B[obs]+sm).^2 + (Y-Y_obs).^2./(c.o.A[obs]+sm).^2)))
+                print("the vehicle crashed! \n")
             end
         end
         if maximum(crash_tmp)>0
