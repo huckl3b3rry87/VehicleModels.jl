@@ -57,12 +57,12 @@ function checkCrash(n, c, sm; kwargs...)
         t = n.r.dfs_plant[end][:t]
         X = n.r.dfs_plant[end][:x]
         Y = n.r.dfs_plant[end][:y]
-        crash_tmp = zeros(length(c["obstacle"]["B"]),1);
-        for obs in length(c["obstacle"]["B"])
+        crash_tmp = zeros(length(c["obstacle"]["radius"]),1);
+        for obs in length(c["obstacle"]["radius"])
             # obstacle postions after the initial postion
             X_obs= c["obstacle"]["xi"][obs] .+ c["obstacle"]["ux"][obs].*t
             Y_obs= c["obstacle"]["yi"][obs] .+ c["obstacle"]["uy"][obs].*t
-            if minimum((X-X_obs).^2./(c["obstacle"]["B"][obs]+sm).^2 + (Y-Y_obs).^2./(c["obstacle"]["A"][obs]+sm).^2) < 1
+            if minimum((X-X_obs).^2./(c["obstacle"]["radius"][obs]+sm).^2 + (Y-Y_obs).^2./(c["obstacle"]["radius"][obs]+sm).^2) < 1
                 crash_tmp[obs] = 1
                 print("the vehicle crashed! \n")
             end
