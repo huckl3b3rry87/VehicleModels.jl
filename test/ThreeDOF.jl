@@ -2,7 +2,7 @@
 # steering angle model test
 function threeDOFv1_test1(n)
   # generic time span
-  t0=0.0; tf=20.0; t=Vector(Ranges.linspace(t0,tf,100));
+  t0=0.0; tf=20.0; t=Vector(linspace(t0,tf,100));
   U=zeros(length(t),2);
   sa(tt)=.15*sin(3*tt);
   U[:,1]=sa.(t)
@@ -22,7 +22,7 @@ end
 # steering rate test
 function threeDOFv2_test1(n)
   # generic time span
-  t0=0.0; tf=20.0; t=Vector(Ranges.linspace(t0,tf,100));
+  t0=0.0; tf=20.0; t=Vector(linspace(t0,tf,100));
 
   U=zeros(length(t),2);
   sr(tt)=0.45*cos(3*tt);
