@@ -53,6 +53,10 @@ export
 
   # KinematicBicycle
   @unpack_VparaKB,
-  @pack_VparaKB
+  @pack_VparaKB,
+
+  # Parameters.jl
+  @unpack,
+  @pack
 
 end # module
