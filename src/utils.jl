@@ -103,3 +103,22 @@ function checkCrash(n, c, sm; kwargs...)
      return crash
   end
 end
+
+"""
+# this funtion can be used to get the fieldnames in a parameter set
+# example
+FNames(Vpara())
+--------------------------------------------------------------------------------------\n
+Author: Huckleberry Febbo, Graduate Student, University of Michigan
+Date Create: 4/08/2018, Last Modified: 4/08/2018 \n
+--------------------------------------------------------------------------------------\n
+"""
+function FNames(pa)
+# To find fieldnames
+r = ()
+for i in 1:length(fieldnames(p))
+      r = (r...,fieldnames(p)[i])
+end
+
+return r
+end

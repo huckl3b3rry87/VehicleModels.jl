@@ -29,6 +29,7 @@ export
   ###########
   Linear_Spline,
   checkCrash,
+  FNames,
 
   # Three DOF
   ThreeDOFv1,
