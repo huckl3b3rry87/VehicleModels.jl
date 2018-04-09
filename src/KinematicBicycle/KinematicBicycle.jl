@@ -1,16 +1,15 @@
-include("parameters.jl")
 
 """
 --------------------------------------------------------------------------------------\n
 Original Authors: BARC Project, Berkely MPC Laboratory -> https://github.com/MPC-Berkeley/barc
-Modified for NLOptControl.jl by: Huckleberry Febbo, Graduate Student, University of Michigan
-Date Create: 2/9/2017, Last Modified: 6/30/2017 \n
+Modified for use wiNLOptControl.jl by: Huckleberry Febbo, Graduate Student, University of Michigan
+Date Create: 2/9/2017, Last Modified: 4/08/2018 \n
 --------------------------------------------------------------------------------------\n
 # this vehicle model is controlled using steering angle and longitudinal acceleration
 """
-function KinematicBicycle(pa::VparaKB)
+function KinematicBicycle_expr(n)
 
-  @unpack_VparaKB pa # vehicle parameters
+  @unpack_Vpara n.params[1]
 
   dx=Array{Expr}(4);
   # Reference: R.Rajamani, Vehicle Dynamics and Control, set. Mechanical Engineering Series, Spring, 2011, page 2
@@ -22,13 +21,13 @@ function KinematicBicycle(pa::VparaKB)
   return dx
 end
 
-function KinematicBicycle(pa::VparaKB,
+function KinematicBicycle(n,
                           x0::Vector,
                            t::Vector,
                            U::Matrix,
                           t0::Float64,
                           tf::Float64)
-    @unpack_VparaKB pa # vehicle parameters
+    @unpack_Vpara n.params[1]
 
     # create splines
     sp_SA=Linear_Spline(t,U[:,1]);
@@ -52,5 +51,5 @@ function KinematicBicycle(pa::VparaKB,
   end
   tspan = (t0,tf)
   prob = ODEProblem(f,x0,tspan)
-  DifferentialEquations.solve(prob,Tsit5())
+  DiffEqBase.solve(prob,Tsit5())
 end

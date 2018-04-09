@@ -1,5 +1,11 @@
 @with_kw immutable Vpara @deftype Float64
     # define model parameters
+
+    # KinematicBicycle.jl only
+    ax_min =  -2.
+    ax_max = 2.
+    # KinematicBicycle.jl only
+    
     m          = 2.6887e+03
     Izz        = 4.1101e+03
     la         = 1.5775        # distance from CoG to front axle

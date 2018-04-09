@@ -10,6 +10,7 @@ using DiffEqBase
 using NLOptControl  # to use newConstraint!() and interpolateLagrange!() for checkCrash()
 
 # funcitons in the VehicleModels.jl package
+include("parameters.jl")
 include("Three_DOF/Three_DOF.jl")
 include("KinematicBicycle/KinematicBicycle.jl")
 include("utils.jl")
@@ -18,11 +19,7 @@ export
   #########
   # Objects
   #########
-  # Three DOF
   Vpara,
-
-  # KinematicBicycle
-  VparaKB,
 
   ###########
   # Functions
@@ -38,6 +35,7 @@ export
 
   # KinematicBicycle
   KinematicBicycle,
+  KinematicBicycle_expr,
 
   ###############################
   # Macros and support functions
@@ -49,12 +47,10 @@ export
   @FZ_RR,
   @Ax_min,
   @Ax_max,
+
+  # parameters
   @unpack_Vpara,
   @pack_Vpara,
-
-  # KinematicBicycle
-  @unpack_VparaKB,
-  @pack_VparaKB,
 
   # Parameters.jl
   @unpack,

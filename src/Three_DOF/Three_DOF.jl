@@ -1,7 +1,6 @@
 # Three DOF Vehicle Model
 include("F_YR.jl")
 include("F_YF.jl")
-include("parameters.jl")
 
 # other functions to export
 include("FZ_RL.jl")
