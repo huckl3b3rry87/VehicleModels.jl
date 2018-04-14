@@ -9,7 +9,7 @@ Date Create: 2/9/2017, Last Modified: 4/08/2018 \n
 """
 function KinematicBicycle_expr(n)
 
-  @unpack_Vpara n.params[1]
+  @unpack_Vpara n.ocp.params[1]
 
   dx=Array{Expr}(4);
   # Reference: R.Rajamani, Vehicle Dynamics and Control, set. Mechanical Engineering Series, Spring, 2011, page 2
@@ -27,7 +27,7 @@ function KinematicBicycle(n,
                            U::Matrix,
                           t0::Float64,
                           tf::Float64)
-    @unpack_Vpara n.params[1]
+    @unpack_Vpara n.ocp.params[1]
 
     # create splines
     sp_SA=Linear_Spline(t,U[:,1]);
