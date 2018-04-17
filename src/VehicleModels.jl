@@ -24,7 +24,6 @@ export
   ###########
   # Functions
   ###########
-  Linear_Spline,
   checkCrash,
   FNames,
 
