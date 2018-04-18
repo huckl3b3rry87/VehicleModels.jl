@@ -30,18 +30,18 @@ function KinematicBicycle(n,
     @unpack_Vpara n.ocp.params[1]
 
     # create splines
-    sp_SA=Linear_Spline(t,U[:,1]);
-    sp_AX=Linear_Spline(t,U[:,2]);
+    sp_SA = linearSpline(t,U[:,1])
+    sp_AX = linearSpline(t,U[:,2])
 
     f = (dx,x,p,t) -> begin
 
     # states
-    psi = x[3];  # 3. Yaw Angle
-    ux  = x[4];  # 4. Longitudinal Speed
+    psi = x[3]  # 3. Yaw Angle
+    ux = x[4]  # 4. Longitudinal Speed
 
     # controls
-    sa  = sp_SA[t]; # Steering Angle
-    ax  = sp_AX[t]; # Longitudinal Acceleration
+    sa = sp_SA[t] # Steering Angle
+    ax = sp_AX[t] # Longitudinal Acceleration
 
     # diff eqs.
     dx[1] = ux*cos(psi + (atan(la/(la+lb)*tan(sa))));   # 1. X position

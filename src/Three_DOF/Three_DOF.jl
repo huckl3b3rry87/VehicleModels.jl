@@ -65,8 +65,8 @@ function ThreeDOFv1(n,
 
     @unpack_Vpara n.ocp.params[1]
     # create splines
-    sp_SA=Linear_Spline(t,U[:,1]);
-    sp_U=Linear_Spline(t,U[:,2]);
+    sp_SA=linearSpline(t,U[:,1]);
+    sp_U=linearSpline(t,U[:,2]);
 
     f = (dx,x,p,t) -> begin
     # states
@@ -204,8 +204,8 @@ function ThreeDOFv2(n,
     @unpack_Vpara n.ocp.params[1]
 
     # create splines
-    sp_SR=Linear_Spline(t,U[:,1]);
-    sp_Jx=Linear_Spline(t,U[:,2]);
+    sp_SR=linearSpline(t,U[:,1]);
+    sp_Jx=linearSpline(t,U[:,2]);
 
     f = (dx,x,p,t) -> begin
 
