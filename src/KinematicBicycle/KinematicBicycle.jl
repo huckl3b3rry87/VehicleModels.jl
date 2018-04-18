@@ -51,5 +51,7 @@ function KinematicBicycle(n,
   end
   tspan = (t0,tf)
   prob = ODEProblem(f,x0,tspan)
-  DiffEqBase.solve(prob,Tsit5())
+  sol = DiffEqBase.solve(prob,Tsit5())
+  U = [sp_SA,sp_AX]
+
 end

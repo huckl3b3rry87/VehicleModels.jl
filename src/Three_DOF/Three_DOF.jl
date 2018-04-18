@@ -90,7 +90,10 @@ function ThreeDOFv1(n,
   end
   tspan = (t0,tf)
   prob = ODEProblem(f,x0,tspan)
-  DiffEqBase.solve(prob,Tsit5())
+
+  sol = DiffEqBase.solve(prob,Tsit5())
+  U = [sp_SA,sp_U]
+  return sol, U
 end
 
 """
@@ -233,5 +236,7 @@ function ThreeDOFv2(n,
   end
   tspan = (t0,tf)
   prob = ODEProblem(f,x0,tspan)
-  DiffEqBase.solve(prob,Tsit5())
+  sol = DiffEqBase.solve(prob,Tsit5())
+  U = [sp_SR,sp_Jx]
+  return sol, U
 end
