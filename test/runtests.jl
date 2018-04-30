@@ -1,19 +1,14 @@
 using VehicleModels
 using Base.Test
+using NLOptControl
 
-tol=0.5;
+tol = 0.5
 
 # test the Three DOF Vehicle Model
 include("ThreeDOF.jl")
 
 # constructor for test
-type N
-  params
-end
-function N()
-  N([Vpara()])
-end
-n=N();
-
+n = NLOpt()
+n.ocp.params = [Vpara()]
 @test threeDOFv1_test1(n) ≈ 0 atol=tol
 @test threeDOFv2_test1(n) ≈ 0 atol=tol

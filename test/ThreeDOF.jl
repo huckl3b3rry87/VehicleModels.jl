@@ -9,7 +9,7 @@ function threeDOFv1_test1(n)
   U[:,2]=10.0;
   X0=[0.0, 0.0, 0.0, 0.0,1.2038];
 
-  sol=ThreeDOFv1(n,Vector(X0),t,U,t0,tf);
+  sol, U=ThreeDOFv1(n,Vector(X0),t,U,t0,tf);
   actual=sol(sol.t[end]);
   expected=[42.7152,194.619,-0.213113,-0.0127374,1.50199];
   A=zeros(length(actual));
@@ -30,7 +30,7 @@ function threeDOFv2_test1(n)
   U[:,1]=0.0;
   U[:,2]=0.0;
   X0=[0.0, 0.0, 0.0, 0.0, 1.2038,0.0,10.0,0.0];
-  sol=ThreeDOFv2(n,Vector(X0),t,U,t0,tf);
+  sol, U=ThreeDOFv2(n,Vector(X0),t,U,t0,tf);
 
   actual=sol(sol.t[end]);
   expected=[72.2972,186.477,-0.033967,4.7157e-5,1.20477,0.0,10.0,0.0];
