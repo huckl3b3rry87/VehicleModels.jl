@@ -65,28 +65,28 @@ function ThreeDOFv1(n,
 
     @unpack_Vpara n.ocp.params[1]
     # create splines
-    sp_SA=linearSpline(t,U[:,1]);
-    sp_U=linearSpline(t,U[:,2]);
+    sp_SA = linearSpline(t,U[:,1])
+    sp_U = linearSpline(t,U[:,2])
 
     f = (dx,x,p,t) -> begin
     # states
-    V   = x[3];  # 3. Lateral Speed
-    R   = x[4];  # 4. Yaw Rate
-    PSI = x[5];  # 5. Yaw angle
+    V   = x[3]  # 3. Lateral Speed
+    R   = x[4]  # 4. Yaw Rate
+    PSI = x[5]  # 5. Yaw angle
 
     # controls
-    SA  = sp_SA[t]; # Steering Angle
-    U  = sp_U[t];   # Longitudinal Speed
+    SA  = sp_SA[t] # Steering Angle
+    U  = sp_U[t]   # Longitudinal Speed
 
     # set variables for tire equations
-    Ax = 0;
+    Ax = 0
 
     # diff eqs.
-    dx[1]   = U*cos(PSI) - (V + la*R)*sin(PSI);    # X position
-    dx[2] 	= U*sin(PSI) + (V + la*R)*cos(PSI);    # Y position
-    dx[3]   = (@F_YF() + @F_YR())/m - R*U;         # Lateral Speed
-    dx[4]  	= (la*@F_YF()-lb*@F_YR())/Izz;         # Yaw Rate
-    dx[5]  	= R;                                   # Yaw Angle
+    dx[1]   = U*cos(PSI) - (V + la*R)*sin(PSI)    # X position
+    dx[2] 	= U*sin(PSI) + (V + la*R)*cos(PSI)    # Y position
+    dx[3]   = (@F_YF() + @F_YR())/m - R*U         # Lateral Speed
+    dx[4]  	= (la*@F_YF()-lb*@F_YR())/Izz         # Yaw Rate
+    dx[5]  	= R                                   # Yaw Angle
   end
   tspan = (t0,tf)
   prob = ODEProblem(f,x0,tspan)

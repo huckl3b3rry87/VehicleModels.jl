@@ -4,18 +4,20 @@ Author: Huckleberry Febbo, Graduate Student, University of Michigan
 Date Create: 2017, Last Modified: 2/06/2018 \n
 --------------------------------------------------------------------------------------\n
 """
-function checkCrash(n, c, sm; kwargs...)
-    kw = Dict(kwargs);
+function checkCrash(n; kwargs...)
+    kw = Dict(kwargs)  # NOTE kwargs are depreciated
 
-    if !haskey(kw,:plant); plant=false;
+    c = n.ocp.params[5]
+    sm = c["misc"]["sm2"]
+    if !haskey(kw,:plant); plant=true;
     else; plant = get(kw,:plant,0);
     end
 
     if plant
-        t = n.r.dfs_plant[end][:t]
-        X = n.r.dfs_plant[end][:x]
-        Y = n.r.dfs_plant[end][:y]
-        crash_tmp = zeros(length(c["obstacle"]["radius"]),1);
+        t = n.r.ip.dfsplant[end][:t]
+        X = n.r.ip.dfsplant[end][:x]
+        Y = n.r.ip.dfsplant[end][:y]
+        crash_tmp = zeros(length(c["obstacle"]["radius"]),1)
         for obs in length(c["obstacle"]["radius"])
             # obstacle postions after the initial postion
             X_obs= c["obstacle"]["x0"][obs] .+ c["obstacle"]["vx"][obs].*t
@@ -26,14 +28,14 @@ function checkCrash(n, c, sm; kwargs...)
             end
         end
         if maximum(crash_tmp)>0
-            crash = true;
+            crash = true
         else
-            crash = false;
+            crash = false
         end
        return crash
     else # in the NLOptControl.jl paper, there was no plant and the following code was used
         # also this will break, need to remove pts from function handle
-       pts = 300;
+       pts = 300
        # redo interpolation with desired number of points
       if n.s.integrationMethod == :ps
           interpolateLagrange!(n;numPts=Int64(pts/n.Ni))
