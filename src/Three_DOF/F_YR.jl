@@ -1,4 +1,4 @@
-macro F_YR2()#(V, U, Ax, r, SA) # rear tire force
+macro F_YR()#(V, U, Ax, r, SA) # rear tire force
 	code =quote
 		if length(Ax) != 1
 			Fyr = zeros(length(Ax),1)
