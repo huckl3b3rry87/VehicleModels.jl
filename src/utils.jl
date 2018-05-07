@@ -13,6 +13,21 @@ function checkCrash(n; kwargs...)
     else; plant = get(kw,:plant,0);
     end
 
+    # check to see if the minimum vertical tire load was exceeded
+    Fz_off = c["vehicle"][:Fz_off]
+    V = n.r.ip.dfsplant[end][:v]
+    U = n.r.ip.dfsplant[end][:ux]
+    Ax = n.r.ip.dfsplant[end][:ax]
+    R = n.r.ip.dfsplant[end][:r]
+    SA = n.r.ip.dfsplant[end][:sa]
+    @unpack_Vpara n.ocp.params[1]
+    #Fz_off = 1000 # TMP
+
+    if any(@FZ_RL() .< Fz_off) || any(@FZ_RR() .< Fz_off)
+        println("The vertical tire force went below Fz_off")
+        return true, :tireOff
+    end
+    # check to see if the vehicle crashed into and obstacle
     if plant
         t = n.r.ip.dfsplant[end][:t]
         X = n.r.ip.dfsplant[end][:x]
@@ -24,15 +39,14 @@ function checkCrash(n; kwargs...)
             Y_obs= c["obstacle"]["y0"][obs] .+ c["obstacle"]["vy"][obs].*t
             if minimum((X-X_obs).^2./(c["obstacle"]["radius"][obs]+sm).^2 + (Y-Y_obs).^2./(c["obstacle"]["radius"][obs]+sm).^2) < 1
                 crash_tmp[obs] = 1
-                print("the vehicle crashed! \n")
+                println("the vehicle crashed! \n")
             end
         end
         if maximum(crash_tmp)>0
-            crash = true
+            return true, :crash
         else
-            crash = false
+            return false, NaN
         end
-       return crash
     else # in the NLOptControl.jl paper, there was no plant and the following code was used
         # also this will break, need to remove pts from function handle
        pts = 300
