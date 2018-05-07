@@ -1,5 +1,5 @@
 macro Ax_min()
-	code=quote
+	code = quote
 		# minimum longitudinal acceleration for given speed
 		Ax_min = zeros(length(U),1)
 		for i in eachindex(U)

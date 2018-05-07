@@ -1,5 +1,5 @@
 macro Ax_max()
-	code=quote
+	code = quote
 		# maximum longitudinal acceleration for given speed
 		Ax_max = zeros(length(U),1)
 		for i in eachindex(U)
