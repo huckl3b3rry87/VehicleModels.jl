@@ -13,10 +13,10 @@ function KinematicBicycle_expr(n)
 
   dx=Array{Expr}(4);
   # Reference: R.Rajamani, Vehicle Dynamics and Control, set. Mechanical Engineering Series, Spring, 2011, page 2
-  dx[1]=:(ux[j]*cos(psi[j] + (atan($la/($la+$lb)*tan(sa[j])))));   # X position
-  dx[2]=:(ux[j]*sin(psi[j] + (atan($la/($la+$lb)*tan(sa[j])))));   # Y position
-  dx[3]=:((ux[j]/$lb)*sin((atan($la/($la+$lb)*tan(sa[j])))));      # Yaw Angle
-  dx[4]=:(ax[j]);                                                  # Longitudinal Speed
+  dx[1]=:(u[j]*cos(psi[j] + (atan($la/($la+$lb)*tan(sa[j])))))   # X position
+  dx[2]=:(u[j]*sin(psi[j] + (atan($la/($la+$lb)*tan(sa[j])))))   # Y position
+  dx[3]=:(u[j]*cos(atan($la/($la+$lb)*tan(sa[j])))/($la+$lb)*tan(sa[j])   )      # Yaw Angle
+  dx[4]=:(a[j])                                                  # Total Speed
 
   return dx
 end
@@ -31,27 +31,27 @@ function KinematicBicycle(n,
 
     # create splines
     sp_SA = linearSpline(t,U[:,1])
-    sp_AX = linearSpline(t,U[:,2])
+    sp_A = linearSpline(t,U[:,2])
 
     f = (dx,x,p,t) -> begin
 
     # states
     psi = x[3]  # 3. Yaw Angle
-    ux = x[4]  # 4. Longitudinal Speed
+    u = x[4]   # 4. Total Speed
 
     # controls
     sa = sp_SA[t] # Steering Angle
-    ax = sp_AX[t] # Longitudinal Acceleration
+    a = sp_A[t] # Total Acceleration
 
     # diff eqs.
-    dx[1] = ux*cos(psi + (atan(la/(la+lb)*tan(sa))));   # 1. X position
-    dx[2] = ux*sin(psi + (atan(la/(la+lb)*tan(sa))));   # 2. Y position
-    dx[3] = (ux/lb)*sin((atan(la/(la+lb)*tan(sa))));    # 3. Yaw Angle
-    dx[4] = ax;                                         # 4. Longitudinal Speed
+    dx[1] = u*cos(psi + (atan(la/(la+lb)*tan(sa))))   # 1. X position
+    dx[2] = u*sin(psi + (atan(la/(la+lb)*tan(sa))))   # 2. Y position
+    dx[3] = u*cos(atan(la/(la+lb)*tan(sa)))/(la+lb)*tan(sa)    # 3. Yaw Angle
+    dx[4] = a                                         # 4. Total Speed
   end
   tspan = (t0,tf)
   prob = ODEProblem(f,x0,tspan)
   sol = DiffEqBase.solve(prob,Tsit5())
-  U = [sp_SA,sp_AX]
+  U = [sp_SA,sp_A]
   return sol, U
 end

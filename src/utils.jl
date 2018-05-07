@@ -12,16 +12,27 @@ function checkCrash(n; kwargs...)
     if !haskey(kw,:plant); plant=true;
     else; plant = get(kw,:plant,0);
     end
+    @unpack_Vpara n.ocp.params[1]
 
     # check to see if the minimum vertical tire load was exceeded
     Fz_off = c["vehicle"][:Fz_off]
-    V = n.r.ip.dfsplant[end][:v]
-    U = n.r.ip.dfsplant[end][:ux]
-    Ax = n.r.ip.dfsplant[end][:ax]
-    R = n.r.ip.dfsplant[end][:r]
-    SA = n.r.ip.dfsplant[end][:sa]
-    @unpack_Vpara n.ocp.params[1]
-    #Fz_off = 1000 # TMP
+    if isequal(c["misc"]["model"],:ThreeDOFv2)
+        V = n.r.ip.dfsplant[end][:v]
+        U = n.r.ip.dfsplant[end][:ux]
+        Ax = n.r.ip.dfsplant[end][:ax]
+        R = n.r.ip.dfsplant[end][:r]
+        SA = n.r.ip.dfsplant[end][:sa]
+    elseif isequal(c["misc"]["model"],:KinematicBicycle)
+        Vtotal = n.r.ip.dfsplant[end][:u]
+        Atotal = n.r.ip.dfsplant[end][:a]
+        SA = n.r.ip.dfsplant[end][:sa]
+        Beta = atan.(la/(la+lb)*tan.(SA))
+        V = Vtotal.*sin.(Beta)
+        U = Vtotal.*cos.(Beta)
+        Ax = Atotal.*cos.(Beta)
+        Rturn = (la + lb)./SA  # turning radius, Ackerman angle (small angle assumption)
+        R = V./Rturn
+    end
 
     if any(@FZ_RL() .< Fz_off) || any(@FZ_RR() .< Fz_off)
         println("The vertical tire force went below Fz_off")
