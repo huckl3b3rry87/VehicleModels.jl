@@ -85,5 +85,5 @@
     Fz_off  = 100.
     a_t     = Fz_min + 3*Fz_off  # soft tire force constraint constants
     b_t     = Fz_off
-    EP      = 0.1
+    EP      = 0.01
 end
