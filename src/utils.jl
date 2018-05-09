@@ -15,7 +15,7 @@ function checkCrash(n; kwargs...)
     @unpack_Vpara n.ocp.params[1]
 
     # check to see if the minimum vertical tire load was exceeded
-    Fz_off = c["vehicle"][:Fz_off]
+    Fz_off = c["vehicle"][:Fz_off]  # should be checked with mode
     if isequal(c["misc"]["model"],:ThreeDOFv2)
         V = n.r.ip.dfsplant[end][:v]
         U = n.r.ip.dfsplant[end][:ux]
@@ -23,6 +23,7 @@ function checkCrash(n; kwargs...)
         R = n.r.ip.dfsplant[end][:r]
         SA = n.r.ip.dfsplant[end][:sa]
     elseif isequal(c["misc"]["model"],:KinematicBicycle)
+        error("this functionality is depreciated")
         Vtotal = n.r.ip.dfsplant[end][:u]
         Atotal = n.r.ip.dfsplant[end][:a]
         SA = n.r.ip.dfsplant[end][:sa]
@@ -30,6 +31,14 @@ function checkCrash(n; kwargs...)
         V = Vtotal.*sin.(Beta)
         U = Vtotal.*cos.(Beta)
         Ax = Atotal.*cos.(Beta)
+        Rturn = (la + lb)./SA  # turning radius, Ackerman angle (small angle assumption)
+        R = V./Rturn
+    elseif isequal(c["misc"]["model"],:KinematicBicycle2)
+        U = n.r.ip.dfsplant[end][:ux]
+        SA = n.r.ip.dfsplant[end][:sa]
+        # Beta = atan.(la/(la+lb)*tan.(SA))
+        V = U*la/(la+lb).*tan.(SA)  # U.*tan.(Beta)
+        Ax = n.r.ip.dfsplant[end][:ax]
         Rturn = (la + lb)./SA  # turning radius, Ackerman angle (small angle assumption)
         R = V./Rturn
     end

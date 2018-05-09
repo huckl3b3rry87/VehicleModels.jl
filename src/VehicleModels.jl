@@ -35,7 +35,9 @@ export
   # KinematicBicycle
   KinematicBicycle,
   KinematicBicycle_expr,
-
+  KinematicBicycle2,
+  KinematicBicycle_expr2,
+  
   ###############################
   # Macros and support functions
   ###############################

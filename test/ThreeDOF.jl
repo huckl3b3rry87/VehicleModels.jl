@@ -4,7 +4,7 @@ function threeDOFv1_test1(n)
   # generic time span
   t0 = 0.0; tf = 20.0; t = Vector(linspace(t0,tf,100));
   U = zeros(length(t),2)
-  sa(tt) = .15*sin(3*tt)
+  sa(tt) = 0.15*sin(3*tt)
   U[:,1] = sa.(t)
   U[:,2] = 10.0
   X0 = [0.0, 0.0, 0.0, 0.0, 1.2038]
