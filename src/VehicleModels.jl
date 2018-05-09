@@ -37,7 +37,7 @@ export
   KinematicBicycle_expr,
   KinematicBicycle2,
   KinematicBicycle_expr2,
-  
+
   ###############################
   # Macros and support functions
   ###############################
@@ -46,6 +46,8 @@ export
   @F_YR,
   @FZ_RL,
   @FZ_RR,
+  @FZ_FL,
+  @FZ_FR,
   @Ax_min,
   @Ax_max,
 

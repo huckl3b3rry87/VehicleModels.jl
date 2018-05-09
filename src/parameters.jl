@@ -10,11 +10,13 @@
     Izz        = 4.1101e+03
     la         = 1.5775        # distance from CoG to front axle
     lb         = 1.7245        # distance from CoG to rear axle
-    FzF0       = 1.3680e+04
-    FzR0       = 1.2696e+04
-    dFzx_coeff = 705.
-    KZX        = 705.
-    KZYR       = 1040.
+    FzF0       = 1.3680e+04    # static front axle load
+    FzR0       = 1.2696e+04    # static rear axle load
+
+    # modified to match code: OCOA151019
+    KZX        = 805.    # KZX = dFZX_Coeff = dF: longitudinal load transfer coefficient
+    KZYR       = 1130.   # KZYR = dFZYR_Coeff: lateral load transfer coefficient - rear axle
+    KZYF       = 860.    # KZYF = dFZYF_Coeff: lateral load transfer coefficient - front axle
 
     # defines polynominal for acceleration bounds
     AXC::Array{Float64,1} = [-0.000128015180401862,	0.00858618595422724,	-0.225657108071454,	3.08283259993589,	-0.000138537090018958,	0.00684702729623608,	-0.120391102052425,	-3.55886697370079]
