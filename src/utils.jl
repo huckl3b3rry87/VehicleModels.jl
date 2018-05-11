@@ -8,7 +8,7 @@ function checkCrash(n; kwargs...)
     kw = Dict(kwargs)  # NOTE kwargs are depreciated
 
     c = n.ocp.params[5]
-    sm = c["misc"]["sm2"]
+    sm = c["misc"]["sm"]
     if !haskey(kw,:plant); plant=true;
     else; plant = get(kw,:plant,0);
     end
