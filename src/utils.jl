@@ -43,7 +43,7 @@ function checkCrash(n; kwargs...)
         R = V./Rturn
     end
 
-    if any(@FZ_RL() .< Fz_off) || any(@FZ_RR() .< Fz_off)
+    if any(@FZ_RL() .< Fz_off) || any(@FZ_RR() .< Fz_off) || any(@FZ_FR() .< Fz_off) || any(@FZ_RL() .< Fz_off)
         println("The vertical tire force went below Fz_off")
         return true, :tireOff
     end
