@@ -12,8 +12,8 @@ function threeDOFv1_test1(n)
   actual = sol(sol.t[end])
   expected = [40.8714, 195.019, -0.170866, -0.0139167, 1.5131]
   A = zeros(length(actual))
-  for n in 1:length(expected)
-    A[n] = abs(expected[n]-actual[n])
+  for i in 1:length(expected)
+    A[i] = abs(expected[i]-actual[i])
   end
   return maximum(A)
 end
@@ -32,8 +32,8 @@ function threeDOFv2_test1(n)
   actual = sol(sol.t[end])
   expected = [71.7627,186.682, 0.0, 0.0, 1.2038, 0.0, 10.0, 0.0]
   A = zeros(length(actual))
-  for n in 1:length(expected)
-    A[n] = abs(expected[n]-actual[n])
+  for i in 1:length(expected)
+    A[i] = abs(expected[i]-actual[i])
   end
   return maximum(A)
 end
