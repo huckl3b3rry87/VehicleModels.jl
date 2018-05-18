@@ -61,8 +61,6 @@ function checkCrash(n; kwargs...)
             # obstacle postions after the initial postion
             X_obs= c["obstacle"]["x0"][obs] .+ c["obstacle"]["vx"][obs].*t
             Y_obs= c["obstacle"]["y0"][obs] .+ c["obstacle"]["vy"][obs].*t
-            @show minimum((X-X_obs).^2./(c["obstacle"]["radius"][obs]+sm).^2 + (Y-Y_obs).^2./(c["obstacle"]["radius"][obs]+sm).^2)
-
             if minimum((X-X_obs).^2./(c["obstacle"]["radius"][obs]+sm).^2 + (Y-Y_obs).^2./(c["obstacle"]["radius"][obs]+sm).^2) < 1
                 crash_tmp[obs] = 1
                 println("the vehicle crashed! \n")
