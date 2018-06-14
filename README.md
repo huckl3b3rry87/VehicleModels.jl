@@ -1,7 +1,10 @@
 # VehicleModels.jl
 
 
-[![Travis](https://travis-ci.org/JuliaMPC/VehicleModels.jl.svg?branch=master)](https://travis-ci.org/JuliaMPC/VehicleModels.jl)
+
+[![Build Status](https://travis-ci.org/JuliaMPC/VehicleModels.jl.svg?branch=master)](https://travis-ci.org/JuliaMPC/VehicleModels.jl)
+[![VehicleModels](http://pkg.julialang.org/badges/VehicleModels_0.6.svg)](http://pkg.julialang.org/detail/VehicleModels)
+[![VehicleModels](http://pkg.julialang.org/badges/VehicleModels_0.7.svg)](http://pkg.julialang.org/detail/VehicleModels)
 
 ## Documentation
 
