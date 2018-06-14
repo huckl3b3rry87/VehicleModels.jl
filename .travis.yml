@@ -13,6 +13,4 @@ addons:
 after_success:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
   - julia -e 'Pkg.clone(pwd())'
-  - julia -e 'Pkg.add("Ipopt")'   # temp fix
-  - julia -e 'Pkg.build("Ipopt")' # temp fix
   - julia -e 'Pkg.test("VehicleModels")'
