@@ -9,7 +9,7 @@ include("Ax_max.jl")
 include("Ax_min.jl")
 
 """
-dx = ThreeDOFv1(n,x,u)
+ThreeDOFv2_expr(n) & sol, U = ThreeDOFv1(n,x,u)
 --------------------------------------------------------------------------------------\n
 Author: Huckleberry Febbo, Graduate Student, University of Michigan
 Date Create: 10/20/2017, Last Modified: 5/31/2017 \n
@@ -97,7 +97,7 @@ function ThreeDOFv1(n,
 end
 
 """
-dx = ThreeDOFv2(n,x,u)
+ThreeDOFv2_expr(n) & sol, U = ThreeDOFv2(n,x,u)
 --------------------------------------------------------------------------------------\n
 Author: Huckleberry Febbo, Graduate Student, University of Michigan
 Date Create: 10/20/2017, Last Modified:  5/31/2017 \n
@@ -150,6 +150,7 @@ function ThreeDOFv2_expr(n)
 
   return dx,con,tire_expr
 end
+
 """
 --------------------------------------------------------------------------------------\n
 Author: Huckleberry Febbo, Graduate Student, University of Michigan
@@ -200,5 +201,106 @@ function ThreeDOFv2(n,
   prob = ODEProblem(f,x0,tspan)
   sol = DiffEqBase.solve(prob,Tsit5())
   U = [sp_SR,sp_Jx]
+  return sol, U
+end
+
+"""
+ThreeDOFv3_expr(n) & sol, U = ThreeDOFv3(n,x,u)
+--------------------------------------------------------------------------------------\n
+Author: Huckleberry Febbo, Graduate Student, University of Michigan
+Date Create: 11/3/2018, Last Modified:  11/3/2018 \n
+--------------------------------------------------------------------------------------\n
+# this vehicle model is controlled using steering rate and it has a constant speed
+"""
+function ThreeDOFv3_expr(n)
+
+    @unpack_Vpara n.ocp.params[1]
+
+    # lateral tire load
+    FYF=:(($PD2*($FzF0 - ( - v[j]*r[j])*$KZX)^2 + $PD1*($FzF0 - ( - v[j]*r[j])*$KZX))*sin($PC1*atan(((($PK1*sin(2*atan($PK2*($FzF0 - ( - v[j]*r[j])*$KZX))))/((($PD2*$PC1*($FzF0 - ( - v[j]*r[j])*$KZX)^2 + $PD1*$PC1*($FzF0 - ( - v[j]*r[j])*$KZX)) + (($PD2*$PC1*($FzF0 - ( - v[j]*r[j])*$KZX)^2 + $PD1*$PC1*($FzF0 - ( - v[j]*r[j])*$KZX)))/((($PD2*$PC1*($FzF0 - ( - v[j]*r[j])*$KZX)^2 + $PD1*$PC1*($FzF0 - ( - v[j]*r[j])*$KZX))^2 + $EP^2)^(0.5))*0.001)+$EP))*((atan((v[j] + $la*r[j])/(ux[j]+$EP)) - sa[j]) + $PH2*($FzF0 - ( - v[j]*r[j])*$KZX) + $PH1)) - (($PE2*($FzF0 - ( - v[j]*r[j])*$KZX) + $PE1)*(1 - $PE3)*(((atan((v[j] + $la*r[j])/(ux[j]+$EP)) - sa[j]) + $PH2*($FzF0 - ( - v[j]*r[j])*$KZX) + $PH1))/((((atan((v[j] + $la*r[j])/(ux[j]+$EP)) - sa[j]) + $PH2*($FzF0 - ( - v[j]*r[j])*$KZX) + $PH1)^2 + $EP^2)^(0.5)))*(((($PK1*sin(2*atan($PK2*($FzF0 - ( - v[j]*r[j])*$KZX))))/((($PD2*$PC1*($FzF0 - ( - v[j]*r[j])*$KZX)^2 + $PD1*$PC1*($FzF0 - ( - v[j]*r[j])*$KZX)) + (($PD2*$PC1*($FzF0 - ( - v[j]*r[j])*$KZX)^2 + $PD1*$PC1*($FzF0 - ( - v[j]*r[j])*$KZX)))/((($PD2*$PC1*($FzF0 - ( - v[j]*r[j])*$KZX)^2 + $PD1*$PC1*($FzF0 - ( - v[j]*r[j])*$KZX))^2 + $EP^2)^(0.5))*0.001)+$EP))*((atan((v[j] + $la*r[j])/(ux[j]+$EP)) - sa[j]) + $PH2*($FzF0 - ( - v[j]*r[j])*$KZX) + $PH1)) - atan(((($PK1*sin(2*atan($PK2*($FzF0 - ( - v[j]*r[j])*$KZX))))/((($PD2*$PC1*($FzF0 - ( - v[j]*r[j])*$KZX)^2 + $PD1*$PC1*($FzF0 - ( - v[j]*r[j])*$KZX)) + (($PD2*$PC1*($FzF0 - ( - v[j]*r[j])*$KZX)^2 + $PD1*$PC1*($FzF0 - ( - v[j]*r[j])*$KZX)))/((($PD2*$PC1*($FzF0 - ( - v[j]*r[j])*$KZX)^2 + $PD1*$PC1*($FzF0 - ( - v[j]*r[j])*$KZX))^2 + $EP^2)^(0.5))*0.001)+$EP))*((atan((v[j] + $la*r[j])/(ux[j]+$EP)) - sa[j]) + $PH2*($FzF0 - ( - v[j]*r[j])*$KZX) + $PH1)))))) + ($PV2*($FzF0 - ( - v[j]*r[j])*$KZX)^2 + $PV1*($FzF0 - ( - v[j]*r[j])*$KZX)));
+    FYR=:(($PD2*($FzR0 + ( - v[j]*r[j])*$KZX)^2 + $PD1*($FzR0 + ( - v[j]*r[j])*$KZX))*sin($PC1*atan(((($PK1*sin(2*atan($PK2*($FzR0 + ( - v[j]*r[j])*$KZX))))/((($PD2*$PC1*($FzR0 + ( - v[j]*r[j])*$KZX)^2 + $PD1*$PC1*($FzR0 + ( - v[j]*r[j])*$KZX)) + (($PD2*$PC1*($FzR0 + ( - v[j]*r[j])*$KZX)^2 + $PD1*$PC1*($FzR0 + ( - v[j]*r[j])*$KZX)))/((($PD2*$PC1*($FzR0 + ( - v[j]*r[j])*$KZX)^2 + $PD1*$PC1*($FzR0 + ( - v[j]*r[j])*$KZX))^2+$EP^2)^(0.5))*0.001)+$EP))*((atan((v[j] - $lb*r[j])/(ux[j]+$EP))) + $PH2*($FzR0 + ( - v[j]*r[j])*$KZX) + $PH1)) - (($PE2*($FzR0 + ( - v[j]*r[j])*$KZX) + $PE1)*(1 - $PE3*(((atan((v[j] - $lb*r[j])/(ux[j]+$EP))) + $PH2*($FzR0 + ( - v[j]*r[j])*$KZX) + $PH1))/((((atan((v[j] - $lb*r[j])/(ux[j]+$EP))) + $PH2*($FzR0 + ( - v[j]*r[j])*$KZX) + $PH1)^2 + $EP^2)^(0.5))))*(((($PK1*sin(2*atan($PK2*($FzR0 + ( - v[j]*r[j])*$KZX))))/((($PD2*$PC1*($FzR0 + ( - v[j]*r[j])*$KZX)^2 + $PD1*$PC1*($FzR0 + ( - v[j]*r[j])*$KZX)) + (($PD2*$PC1*($FzR0 + ( - v[j]*r[j])*$KZX)^2 + $PD1*$PC1*($FzR0 + ( - v[j]*r[j])*$KZX)))/((($PD2*$PC1*($FzR0 + ( - v[j]*r[j])*$KZX)^2 + $PD1*$PC1*($FzR0 + ( - v[j]*r[j])*$KZX))^2+$EP^2)^(0.5))*0.001)+$EP))*((atan((v[j] - $lb*r[j])/(ux[j]+$EP))) + $PH2*($FzR0 + ( - v[j]*r[j])*$KZX) + $PH1)) - atan(((($PK1*sin(2*atan($PK2*($FzR0 + ( - v[j]*r[j])*$KZX))))/((($PD2*$PC1*($FzR0 + ( - v[j]*r[j])*$KZX)^2 + $PD1*$PC1*($FzR0 + ( - v[j]*r[j])*$KZX)) + (($PD2*$PC1*($FzR0 + ( - v[j]*r[j])*$KZX)^2 + $PD1*$PC1*($FzR0 + ( - v[j]*r[j])*$KZX)))/((($PD2*$PC1*($FzR0 + ( - v[j]*r[j])*$KZX)^2 + $PD1*$PC1*($FzR0 + ( - v[j]*r[j])*$KZX))^2+$EP^2)^(0.5))*0.001)+$EP))*((atan((v[j] - $lb*r[j])/(ux[j]+$EP))) + $PH2*($FzR0 + ( - v[j]*r[j])*$KZX) + $PH1)))))) + ($PV2*($FzR0 + ( - v[j]*r[j])*$KZX)^2 + $PV1*($FzR0 + ( - v[j]*r[j])*$KZX)));
+
+    dx = Array{Expr}(6)
+    dx[1] = :(ux[j]*cos(psi[j]) - (v[j] + $la*r[j])*sin(psi[j]))   # X position
+    dx[2] = :(ux[j]*sin(psi[j]) + (v[j] + $la*r[j])*cos(psi[j]))   # Y position
+    dx[3] = :(($FYF + $FYR)/$m - r[j]*ux[j])                       # Lateral Speed
+    dx[4] = :(($la*$FYF-$lb*$FYR)/$Izz)                            # Yaw Rate
+    dx[5] = :(r[j])                                                # Yaw Angle
+    dx[6] = :(sr[j])                                               # Steering Angle
+
+    ax = 0.0;
+    # rear vertical tire load
+    FZ_RL=:(0.5*($FzR0 + $KZX*( - v[j]*r[j])) - $KZYR*(($FYF + $FYR)/$m))
+    FZ_RR=:(0.5*($FzR0 + $KZX*( - v[j]*r[j])) + $KZYR*(($FYF + $FYR)/$m))
+    FZ_RL_con=:(0 <= $FZ_RL - $Fz_min)
+    FZ_RR_con=:(0 <= $FZ_RR - $Fz_min)
+
+    # front vertical tire load
+    FZ_FL=:(0.5*($FzR0 - $KZX*( - v[j]*r[j])) - $KZYF*(($FYF + $FYR)/$m))
+    FZ_FR=:(0.5*($FzR0 - $KZX*( - v[j]*r[j])) + $KZYF*(($FYF + $FYR)/$m))
+    FZ_FL_con=:(0 <= $FZ_FL - $Fz_min)
+    FZ_FR_con=:(0 <= $FZ_FR - $Fz_min)
+
+    # linear tire forces
+    Fyf_linear=:($Fy_min <= (atan((v[j] + $la*r[j])/(ux[j]+$EP)) - sa[j])*$Caf <= $Fy_max);
+    Fyr_linear=:($Fy_min <= atan((v[j] - $lb*r[j])/(ux[j]+$EP))*$Car <= $Fy_max);
+
+    con=[FZ_RL_con,FZ_RR_con,FZ_FL_con,FZ_FR_con,Fyf_linear,Fyr_linear,min_ax,max_ax]
+
+    # expression for cost function
+    tire_expr = :(2 + tanh(-($FZ_RL - $a_t)/$b_t) + tanh(-($FZ_RR - $a_t)/$b_t))
+
+  return dx,con,tire_expr
+end
+
+"""
+# NOTE could simplify even more and modify tire force equation to remove Ax
+--------------------------------------------------------------------------------------\n
+Author: Huckleberry Febbo, Graduate Student, University of Michigan
+Date Create: 11/3/2018, Last Modified:  11/3/2018 \n
+--------------------------------------------------------------------------------------\n
+"""
+function ThreeDOFv3(n,
+                   x0::Vector,
+                   t::Vector,
+                   U::Matrix,
+                   t0::Float64,
+                   tf::Float64)
+    if length(t)!=size(U)[1]
+      error(" \n The length of the time vector must match the length of the control input \n")
+    end
+
+    @unpack_Vpara n.ocp.params[1]
+
+    # create spline
+    sp_SR=linearSpline(t,U[:,1])
+
+    f = (dx,x,p,t) -> begin
+
+    # states
+    V   = x[3]  # 3. Lateral Speed
+    R   = x[4]  # 4. Yaw Rate
+    PSI = x[5]  # 5. Yaw angle
+    SA  = x[6]  # 6. Steering Angle
+
+    # params
+    U   = u0_  # Longitudinal Speed
+    Ax  = 0    #  Longitudinal Acceleration
+
+    # controls
+    SR  = sp_SR[t]
+
+    # diff eqs.
+    dx[1]   = U*cos(PSI) - (V + la*R)*sin(PSI)    # X position
+    dx[2] 	= U*sin(PSI) + (V + la*R)*cos(PSI)    # Y position
+    dx[3]   = (@F_YF() + @F_YR())/m - R*U         # Lateral Speed
+    dx[4]  	= (la*@F_YF()-lb*@F_YR())/Izz         # Yaw Rate
+    dx[5]  	= R                                   # Yaw Angle
+    dx[6]   = SR                                  # Steering Angle
+  end
+  tspan = (t0,tf)
+  prob = ODEProblem(f,x0,tspan)
+  sol = DiffEqBase.solve(prob,Tsit5())
+  U = [sp_SR]  # NOTE poor choice of variable names to use U twice.
   return sol, U
 end

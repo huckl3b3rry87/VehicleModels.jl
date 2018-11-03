@@ -31,6 +31,8 @@ export
   ThreeDOFv1,
   ThreeDOFv2,
   ThreeDOFv2_expr,
+  ThreeDOFv3,
+  ThreeDOFv3_expr,
 
   # KinematicBicycle
   KinematicBicycle,
