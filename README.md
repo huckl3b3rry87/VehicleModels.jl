@@ -1,17 +1,12 @@
 # VehicleModels.jl
-
-
-
 [![Build Status](https://travis-ci.org/JuliaMPC/VehicleModels.jl.svg?branch=master)](https://travis-ci.org/JuliaMPC/VehicleModels.jl)
 [![VehicleModels](http://pkg.julialang.org/badges/VehicleModels_0.6.svg)](http://pkg.julialang.org/detail/VehicleModels)
 [![VehicleModels](http://pkg.julialang.org/badges/VehicleModels_0.7.svg)](http://pkg.julialang.org/detail/VehicleModels)
 
 ## Documentation
-
 The full documentation can be found [here](https://juliampc.github.io/MPCDocs.jl/stable/).
 
 ## Installation
-
 In Julia, you can install the VehicleModels.jl package by typing:
 ```julia
 julia>Pkg.clone("https://github.com/juliaMPC/VehicleModels.jl")
@@ -28,7 +23,6 @@ julia>notebook(dir = Pkg.dir("VehicleModels")*"/examples")
 
 
 ## Citation
-
 If you find this package useful, please cite this paper:
 
 ```
